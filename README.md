@@ -183,6 +183,7 @@ Los resultados son enviados en tiempo real a Langfuse utilizando la **Score API*
 
 ## 📁 Estructura del Proyecto
 
+```text
 .
 ├── data/                       # Documentación corporativa (HR, Tech, Finance)
 │   ├── finance_docs/

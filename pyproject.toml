@@ -1,7 +1,7 @@
 [project]
 name = "pi-henry-m3"
 version = "0.1.0"
-description = "Add your description here"
+description = "PI-Henry-M3"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = []
