@@ -1,0 +1,437 @@
+[
+  {
+    "timestamp": "2026-07-19T21:49:42.880757",
+    "question": "a cuantos kilometros estoy de la playa?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
+    "evaluation": {
+      "score": 0
+    }
+  },
+  {
+    "timestamp": "2026-07-19T22:06:18.693935",
+    "question": "a cuantos kilometros estoy de la playa?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
+    "evaluation": {
+      "score": 0
+    }
+  },
+  {
+    "timestamp": "2026-07-19T22:06:38.664003",
+    "question": "cuantos dias de vacaciones tengo?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar datos sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-19T22:07:30.615035",
+    "question": "cuantos dias de vacaciones tengo?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar datos sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:33:53.134055",
+    "question": "cuando cargo los viaticos?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
+    "evaluation": {
+      "score": 0
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:34:12.500901",
+    "question": "cuanto saldo tengo en viaticos?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
+    "evaluation": {
+      "score": 0
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:34:37.019410",
+    "question": "como miro mi recibo de sueldo?",
+    "destination": "hr",
+    "response": "La política de Recursos Humanos no proporciona información específica sobre cómo acceder a su recibo de sueldo. Sin embargo, generalmente, los recibos de sueldo pueden ser consultados a través de la plataforma interna de la empresa, donde se suelen almacenar documentos relacionados con la nómina y la liquidación de salarios. \n\nTe recomendaría que te pongas en contacto con el área de Recursos Humanos o con el departamento de liquidaciones para obtener instrucciones precisas sobre cómo acceder a tu recibo de sueldo. Ellos podrán guiarte en el proceso y resolver cualquier duda que tengas al respecto.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la consulta sobre cómo acceder al recibo de sueldo. Sin embargo, aunque proporciona información útil sobre la plataforma interna y sugiere contactar a Recursos Humanos, no detalla pasos específicos para acceder al recibo, lo que afecta la completitud. La respuesta se mantiene fiel al contexto y no inventa información."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:38:03.046401",
+    "question": "¿Cuál es la fecha límite para rendir los gastos de viáticos?",
+    "destination": "finance",
+    "response": "Lamentablemente, no tengo acceso a fechas límite específicas ni a información sobre su situación particular. Sin embargo, puedo informarle que, en general, las políticas de rendición de gastos de viáticos suelen establecer un plazo determinado desde la fecha en que se incurrieron los gastos hasta la presentación de los mismos. Para obtener información precisa sobre su caso, le recomiendo que se comunique con el área de administración o finanzas de su organización.",
+    "evaluation": {
+      "score_general": 6,
+      "dimensiones": {
+        "relevancia": 7,
+        "completitud": 5,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante al abordar la pregunta sobre la fecha límite, pero no proporciona información específica ni exhaustiva sobre el tema. Se mantiene fiel al contexto al sugerir contactar al área correspondiente, pero carece de detalles concretos que podrían ser útiles para el usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:43:03.689999",
+    "question": "¿Qué día del mes se procesan los reembolsos de viaticos?",
+    "destination": "finance",
+    "response": "Lamentablemente, no tengo acceso a información específica sobre fechas de procesamiento de reembolsos de viáticos. Sin embargo, puedo ofrecerte un resumen de las políticas generales de rendición y plazos.\n\nGeneralmente, las políticas de rendición de viáticos establecen que los empleados deben presentar sus solicitudes de reembolso dentro de un plazo determinado tras la finalización del viaje. Este plazo suele ser de 30 días. Además, es importante que los gastos se ajusten a los topes establecidos por la empresa y que se presenten con la documentación adecuada, como recibos y comprobantes.\n\nPara obtener información específica sobre el día del mes en que se procesan los reembolsos, te recomiendo que te pongas en contacto con el área de administración o finanzas de tu empresa, ya que ellos podrán proporcionarte detalles actualizados y precisos sobre tu situación particular.",
+    "evaluation": {
+      "score_general": 6,
+      "dimensiones": {
+        "relevancia": 5,
+        "completitud": 7,
+        "fidelidad": 7
+      },
+      "justificacion": "La respuesta es relevante en cuanto a las políticas generales de reembolsos, pero no aborda directamente la pregunta sobre el día específico del mes en que se procesan. Ofrece información útil, pero no es exhaustiva en cuanto a la solicitud del usuario. Se mantiene fiel al contexto al no inventar datos, pero carece de la información específica solicitada."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:56:41.122873",
+    "question": "¿Cuál es el monto máximo para viáticos diarios?",
+    "destination": "finance",
+    "response": "El monto máximo permitido para almuerzos o viáticos diarios es de 20.000 pesos.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante y se enfoca en la pregunta del usuario sobre el monto máximo para viáticos diarios. Sin embargo, podría ser más completa al incluir información sobre otros tipos de viáticos o condiciones específicas. La respuesta es fiel al contexto, ya que no se inventan datos."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T12:57:45.384028",
+    "question": "la vpn me va a funcionar en Brasil?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa debería funcionar en Brasil siempre y cuando utilices la credencial de FortiClient y el token de doble factor (2FA) correctamente. Asegúrate de tener acceso a internet para poder conectarte.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 8,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre el funcionamiento de la VPN en Brasil. Es completa en cuanto a los requisitos necesarios para su uso, aunque podría incluir información adicional sobre posibles restricciones o configuraciones específicas en Brasil. Se mantiene fiel al contexto y no inventa datos."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T13:00:21.556907",
+    "question": "¿Cuál es la fecha límite para rendir los gastos de viáticos?",
+    "destination": "finance",
+    "response": "La fecha límite para rendir los gastos de viáticos es dentro de los primeros 5 días hábiles de cada mes. Es importante cumplir con este plazo para asegurar la correcta gestión y reembolso de los gastos.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 8,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre la fecha límite para rendir gastos de viáticos. Es completa al mencionar el plazo específico y la importancia de cumplirlo, aunque podría incluir información adicional sobre excepciones o procedimientos específicos. La fidelidad es alta, ya que no se presentan datos inventados y se mantiene dentro del contexto de la pregunta."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T13:15:33.684586",
+    "question": "la vpn funciona en francia?",
+    "destination": "tech",
+    "response": "El contexto proporcionado no menciona específicamente la ubicación geográfica en la que la VPN puede funcionar. Sin embargo, si tienes las credenciales de FortiClient y el token de doble factor (2FA), deberías poder conectarte a la VPN desde cualquier lugar, incluyendo Francia. Si experimentas problemas, asegúrate de seguir los pasos adecuados para la conexión.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre la funcionalidad de la VPN en Francia. Es completa en el sentido de que menciona la necesidad de credenciales y 2FA, pero podría incluir más detalles sobre posibles restricciones o configuraciones específicas. La fidelidad es buena, ya que no se inventan datos, pero se basa en suposiciones sobre el contexto que no se especifican."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:23:14.313281",
+    "question": "cuantos dias de vacaciones tengo por ley?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Por lo tanto, le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 7,
+      "dimensiones": {
+        "relevancia": 8,
+        "completitud": 6,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante al mencionar los 15 días de vacaciones, que es una información clave. Sin embargo, no aborda la variabilidad que puede existir según la legislación local o el tipo de contrato, lo que afecta la completitud. La respuesta se mantiene fiel al contexto al recomendar verificar con el área de liquidaciones, pero podría haber incluido más detalles sobre la ley aplicable."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:29:56.451413",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:34:31.167960",
+    "question": "cuantos dias de vacaciones tengo?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:48:26.824682",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:51:23.721747",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Por lo tanto, le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda la pregunta sobre los días de vacaciones, proporcionando información general sobre la política de vacaciones. Sin embargo, no ofrece un número específico de días que el usuario tiene, lo que afecta la completitud. La respuesta se mantiene fiel al contexto y no inventa datos."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T14:56:34.432295",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:02:08.200627",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:06:22.802785",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:09:02.184027",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:21:11.449050",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:25:25.745192",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:26:09.654653",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría haber incluido más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:33:18.574539",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:41:23.111379",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:52:30.310502",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones anticipadas. Sin embargo, como asistente general, no tengo acceso directo a su saldo histórico particular o legajo en tiempo real. Le recomiendo que verifique su saldo de vacaciones con el área de liquidaciones para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Es completa en cuanto a la política general, pero podría mejorar al ofrecer más detalles sobre cómo verificar el saldo específico. Se mantiene fiel al contexto al no inventar información sobre el saldo personal del usuario."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:52:43.197237",
+    "question": "funciona la vpn en alemania?",
+    "destination": "tech",
+    "response": "El manual de soporte técnico no especifica la ubicación geográfica para el uso de la VPN corporativa. Sin embargo, si tienes la credencial de FortiClient y el token de doble factor (2FA), deberías poder conectarte a la VPN desde Alemania. Si experimentas problemas, asegúrate de seguir los pasos adecuados para la conexión.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre el funcionamiento de la VPN en Alemania. Sin embargo, aunque proporciona información útil sobre la conexión, no detalla posibles problemas específicos que podrían surgir en esa ubicación, lo que afecta la completitud. La respuesta se mantiene fiel al contexto y no inventa información."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:52:58.347882",
+    "question": "tengo los viaticos cubiertos?",
+    "destination": "finance",
+    "response": "Lamentablemente, no tengo acceso a información específica sobre su situación personal o sus viáticos. Sin embargo, puedo informarle sobre las políticas generales relacionadas con los viáticos. \n\nSegún la política de Finanzas y Gastos, los rendimientos de viáticos deben presentarse dentro de los primeros 5 días hábiles de cada mes. Además, el monto máximo permitido para almuerzos o viáticos diarios es de 20.000 pesos. Para solicitar un reembolso, es obligatorio adjuntar la factura B o C a nombre de la empresa. Los reembolsos de gastos se acreditan los días 15 y 30 de cada mes.\n\nLe recomiendo que se comunique con el área de administración o finanzas para obtener información específica sobre su situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 8,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante ya que aborda la pregunta sobre los viáticos, proporcionando información sobre las políticas generales. Es completa al detallar los procedimientos y requisitos, aunque no responde directamente a la situación personal del usuario. Se mantiene fiel al contexto al no inventar información y sugiere un contacto adecuado para más detalles."
+    }
+  },
+  {
+    "timestamp": "2026-07-20T15:53:09.741076",
+    "question": "la playa mas linda cual es?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
+    "evaluation": {
+      "score_general": 0
+    }
+  }
+]

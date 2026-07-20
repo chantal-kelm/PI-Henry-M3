@@ -1,0 +1,4 @@
+Manual de Soporte Técnico e IT:
+- Para conectarse a la VPN corporativa se debe utilizar la credencial de FortiClient y el token de doble factor (2FA).
+- En caso de olvido o bloqueo de contraseña, el usuario debe solicitar el blanqueo a través del portal de autogestión de IT.
+- Si la computadora no enciende o presenta pantalla azul, se debe abrir un ticket con prioridad Alta indicando el número de activo del equipo.

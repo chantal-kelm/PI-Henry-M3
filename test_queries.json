@@ -1,0 +1,42 @@
+[
+    {
+        "question": "¿Cuántos días de vacaciones me corresponden por ley?",
+        "expected": "hr"
+    },
+    {
+        "question": "Mi computadora no enciende y la VPN da error de credenciales.",
+        "expected": "tech"
+    },
+    {
+        "question": "¿Cuál es la fecha límite para rendir los gastos de viáticos?",
+        "expected": "finance"
+    },
+    {
+        "question": "Necesito cambiar mi contraseña del Active Directory.",
+        "expected": "tech"
+    },
+    {
+        "question": "¿El plan médico corporativo cubre reintegros odontológicos?",
+        "expected": "hr"
+    },
+    {
+        "question": "Facturé un almuerzo de negocios de 500 USD, ¿quién lo aprueba?",
+        "expected": "finance"
+    },
+    {
+        "question": "¿Cómo se procesan las licencias por paternidad?",
+        "expected": "hr"
+    },
+    {
+        "question": "El puerto de OpenVPN se queda congelado reconectando.",
+        "expected": "tech"
+    },
+    {
+        "question": "¿A qué mail puedo mandar una consulta sobre liquidación de haberes o finanzas?",
+        "expected": "finance"
+    },
+    {
+        "question": "Quiero saber las políticas de comida o beneficios de la empresa.",
+        "expected": "hr"
+    }
+]
