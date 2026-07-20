@@ -8,7 +8,7 @@ Un sistema multiagente inteligente, modular y estructurado en scripts de Python 
 El flujo de procesamiento está diseñado bajo principios de modularidad, eficiencia en consumo de tokens y separación de responsabilidades:
 
 ```text
-  ┌──────────────────────────┐
+                               ┌──────────────────────────┐
                                │     Entrada Usuario      │
                                └────────────┬─────────────┘
                                             │
