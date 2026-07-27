@@ -7,6 +7,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from langfuse import observe, propagate_attributes
+from langchain_core.runnables import RunnableBranch, RunnableLambda
 
 from src.agents.orchestrator import get_orchestrator_chain
 from src.agents.hr_agent import get_hr_chain
@@ -121,6 +122,49 @@ def generate_domain_response(agent, agent_input: dict):
     if config:
         return agent.invoke(agent_input, config=config)
     return agent.invoke(agent_input)
+
+
+def get_conditional_agent_router() -> RunnableBranch:
+    """Construye el enrutamiento condicional LCEL hacia el agente especializado."""
+    return RunnableBranch(
+        (
+            lambda route_input: route_input["destination"] == "hr",
+            RunnableLambda(lambda _route_input: get_hr_chain()).with_config(
+                run_name="select_hr_agent"
+            ),
+        ),
+        (
+            lambda route_input: route_input["destination"] == "tech",
+            RunnableLambda(lambda _route_input: get_tech_chain()).with_config(
+                run_name="select_tech_agent"
+            ),
+        ),
+        (
+            lambda route_input: route_input["destination"] == "finance",
+            RunnableLambda(lambda _route_input: get_finance_chain()).with_config(
+                run_name="select_finance_agent"
+            ),
+        ),
+        RunnableLambda(lambda _route_input: None).with_config(
+            run_name="select_out_of_scope"
+        ),
+    )
+
+
+@observe(name="select_domain_agent", as_type="chain")
+def select_domain_agent(destination: str, question: str):
+    """Delega mediante RunnableBranch únicamente al agente del dominio elegido."""
+    callbacks = get_langchain_callbacks()
+    config = {
+        "callbacks": callbacks,
+        "metadata": {"destination": destination},
+        "run_name": "conditional_agent_routing",
+    }
+
+    return get_conditional_agent_router().invoke(
+        {"destination": destination, "question": question},
+        config=config,
+    )
 
 
 def validate_test_queries(queries: object) -> list[dict]:
@@ -261,9 +305,10 @@ def run_pipeline(question: str, session_id: str = "default_session"):
 
         # 1. Router
         destination = route_intent(clean_question)
+        agent_res = select_domain_agent(destination, clean_question)
 
         # 2. Fuera de alcance
-        if destination == "out_of_scope":
+        if agent_res is None:
 
             response_text = (
                 "Lo siento, esa consulta está fuera del ámbito corporativo "
@@ -304,17 +349,7 @@ def run_pipeline(question: str, session_id: str = "default_session"):
 
             return result
 
-        # 3. Selección del agente
-        if destination == "hr":
-            agent_res = get_hr_chain()
-
-        elif destination == "tech":
-            agent_res = get_tech_chain()
-
-        else:
-            agent_res = get_finance_chain()
-
-        # 4. Recuperación única del contexto
+        # 3. Recuperación única del contexto
         agent, retriever = agent_res
         context_text, doc_sources = retrieve_context(retriever, clean_question)
         agent_input = {
@@ -332,11 +367,11 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                 }
             )
 
-        # 5. Ejecutar agente
+        # 4. Ejecutar agente
         response = generate_domain_response(agent, agent_input)
         response_text = ensure_string(response)
 
-        # 6. Evaluación
+        # 5. Evaluación
         eval_res = evaluate_response(
             question=clean_question,
             response=response_text,

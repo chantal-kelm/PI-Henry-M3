@@ -227,9 +227,10 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 
 ## ⚙️ Notas de Configuración y Decisiones Técnicas
 
-* **Routing con LangChain:** El orquestador usa `ChatPromptTemplate` +
-  `ChatOpenAI` + `StrOutputParser`. La selección posterior del agente se realiza
-  mediante control de flujo Python.
+* **Routing condicional con LangChain:** El orquestador usa
+  `ChatPromptTemplate` + `ChatOpenAI` + `StrOutputParser`. Su clasificación
+  alimenta un `RunnableBranch` de LCEL cuyos handlers `RunnableLambda`
+  inicializan de forma lazy únicamente el agente especializado seleccionado.
 
 * **RAG especializado por dominio:** Cada agente carga su colección, aplica
   `RecursiveCharacterTextSplitter`, genera embeddings con
@@ -314,6 +315,7 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 │   └── multi_agent_system.py   # Orquestador principal, Router y CLI
 ├── tests/                      # Tests deterministas sin servicios externos
 │   ├── test_agent_caching.py
+│   ├── test_conditional_routing.py
 │   ├── test_evaluator.py
 │   └── test_routing_validation.py
 ├── .env.example

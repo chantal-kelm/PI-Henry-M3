@@ -360,5 +360,69 @@
       },
       "justificacion": "La respuesta aborda directamente la pregunta sobre el funcionamiento de la VPN en Suiza, confirmando que debería funcionar si se cumplen las condiciones necesarias. Además, se alinea con el contexto que establece la obligatoriedad del uso de la VPN para la conexión remota."
     }
+  },
+  {
+    "timestamp": "2026-07-27T15:22:33.979056",
+    "question": "cual es el monto que tengo disponible en reintegro de viaticos al mes?",
+    "destination": "finance",
+    "response": "Lamentablemente, no tengo acceso a información específica sobre su cuenta o transacciones individuales, por lo que no puedo proporcionarle el monto disponible en reintegro de viáticos. Sin embargo, puedo informarle que el monto tope máximo permitido para almuerzos o viáticos diarios por persona es de 20.000 pesos argentinos. Para obtener información detallada sobre su situación particular, le recomiendo que se comunique con el área de administración o finanzas.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 6.67,
+      "dimensiones": {
+        "relevancia": 5,
+        "completitud": 5,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda parcialmente la pregunta al no proporcionar el monto específico de reintegro de viáticos, pero sí menciona el límite máximo permitido. Además, sugiere contactar al área de administración para más información, lo que es relevante. Sin embargo, omite detalles sobre el plazo de presentación que podrían ser importantes para el contexto de los viáticos."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T15:25:06.334991",
+    "question": "cuantos dias me corresponden de vacaciones?",
+    "destination": "hr",
+    "response": "El contexto proporcionado no especifica la cantidad exacta de días de vacaciones que corresponden. Te recomendaría consultar el reglamento interno de la empresa o contactar al área de HR para obtener información específica sobre tu caso y la cantidad de días de vacaciones que te corresponden.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 8.33,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 5,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta es relevante ya que aborda directamente la pregunta sobre los días de vacaciones. Sin embargo, omite información importante sobre la caducidad y acumulación de días de vacaciones que podría ser útil para el usuario. Todas las afirmaciones sobre la falta de información específica están respaldadas por el contexto."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T15:25:49.164737",
+    "question": "la vpn funciona en canada?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa funciona en Canadá, siempre y cuando tengas acceso a internet y sigas el procedimiento adecuado para conectarte. Recuerda que el uso de la VPN es obligatorio para acceder a los códigos y plataformas de gestión desde cualquier ubicación fuera de la oficina corporativa.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre el funcionamiento de la VPN en Canadá, proporciona información completa sobre la necesidad de acceso a internet y el procedimiento para conectarse, y todas las afirmaciones están respaldadas por el contexto proporcionado."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T15:25:58.970665",
+    "question": "cual es la playa mas linda?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, esa consulta está fuera del ámbito corporativo de Recursos Humanos, Finanzas o Soporte Técnico.",
+    "evaluation": {
+      "status": "not_applicable",
+      "score_general": null,
+      "dimensiones": {
+        "relevancia": null,
+        "completitud": null,
+        "fidelidad": null
+      },
+      "justificacion": "Consulta fuera del dominio soportado por los agentes."
+    }
   }
 ]
