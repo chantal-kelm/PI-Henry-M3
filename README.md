@@ -170,7 +170,7 @@ cantidad de chunks: HR 57, Tech 53 y Finance 70 con los documentos actuales.
 
 ## Ejemplo de consulta `HR`
 
-![alt text](image.png)
+![alt text](assets/image.png)
 
 ## Ejemplo de consulta `FINANCE`
 
