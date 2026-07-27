@@ -123,7 +123,7 @@ métricas, sin API keys ni llamadas externas:
 ```text
 python -m unittest discover -s tests -v
 ```
-![alt text](image-13.png)
+![alt text](assets/image-13.png)
 
 Para ejecutar la prueba de aceptación contra el router LLM real:
 
@@ -137,7 +137,7 @@ La prueba live utiliza las consultas de `test_queries.json`, requiere
 comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
 puede utilizarse como gate de CI.
 
-![alt text](image-12.png)
+![alt text](assets/image-12.png)
 
 ### Verificación de chunking por dominio
 Para comprobar que cada colección documental supera el mínimo de 50 chunks exigido por la consigna:
@@ -149,7 +149,7 @@ python script_chunks.py
 Este script reutiliza los parámetros del pipeline y muestra por consola la
 cantidad de chunks: HR 57, Tech 53 y Finance 70 con los documentos actuales.
 
-![alt text](image-6.png)
+![alt text](assets/image-6.png)
 
 # 💡 Ejemplos de Uso
 
@@ -166,19 +166,19 @@ cantidad de chunks: HR 57, Tech 53 y Finance 70 con los documentos actuales.
 
 ## Ejemplo de consulta `OUT_OF_SCOPE`
 
-![alt text](image-11.png)
+![alt text](assets/image-11.png)
 
 ## Ejemplo de consulta `HR`
 
-![alt text](image-1.png)
+![alt text](assets/image-1.png)
 
 ## Ejemplo de consulta `FINANCE`
 
-![alt text](image-9.png)
+![alt text](assets/image-9.png)
 
 ## Ejemplo de consulta `TECH`
 
-![alt text](image-10.png)
+![alt text](assets/image-10.png)
 
 ### 📊 Registro de Auditoría Multidimensional (`results_log.json`)
 
@@ -223,7 +223,7 @@ Una evaluación correcta retorna `status: evaluated`. Si el modelo evaluador, el
 
 Los resultados válidos se registran en Langfuse utilizando la **Score API** sobre la traza principal `multi_agent_pipeline`, creando scores numéricos para `score_general`, `relevancia`, `completitud` y `fidelidad`, además de un score de texto con la justificación. Los errores técnicos se registran por separado mediante `evaluation_succeeded` y `evaluation_error`.
 
-![Evaluación y Trazabilidad en Langfuse](image-8.png)
+![Evaluación y Trazabilidad en Langfuse](assets/image-8.png)
 
 ## ⚙️ Notas de Configuración y Decisiones Técnicas
 
