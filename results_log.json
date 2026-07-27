@@ -424,5 +424,21 @@
       },
       "justificacion": "Consulta fuera del dominio soportado por los agentes."
     }
+  },
+  {
+    "timestamp": "2026-07-27T16:20:14.118148",
+    "question": "cuantos dias tengo de licencia materna?",
+    "destination": "hr",
+    "response": "Tienes 90 días corridos de licencia remunerada si eres una persona gestante.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre la duración de la licencia materna, proporcionando la información exacta de 90 días corridos de licencia remunerada para personas gestantes, que está respaldada por el contexto. Además, incluye información relevante sobre la acumulación con el período de vacaciones, aunque no se solicitó específicamente."
+    }
   }
 ]
