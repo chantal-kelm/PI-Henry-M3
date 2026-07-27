@@ -178,5 +178,95 @@
       },
       "justificacion": "La respuesta es relevante y aborda directamente la pregunta sobre el uso de VPN en Brasil. Es completa al mencionar la necesidad de acceso a internet y la obligatoriedad del uso de la VPN para acceder a recursos corporativos. La fidelidad es alta, ya que se alinea con el contexto proporcionado sobre el uso de la VPN corporativa."
     }
+  },
+  {
+    "timestamp": "2026-07-27T12:31:19.502571",
+    "question": "tengo vacaciones disponibles?",
+    "destination": "hr",
+    "response": "Para determinar si tienes vacaciones disponibles, es necesario revisar tu saldo de días de vacaciones acumulados y si has utilizado días en el período correspondiente. Recuerda que las vacaciones no son acumulables de un año a otro, salvo acuerdos extraordinarios aprobados por el área de HR. Te recomiendo que consultes con el área de HR para obtener información específica sobre tu situación.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 8,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta es relevante y aborda directamente la pregunta sobre las vacaciones disponibles, proporcionando información útil sobre la acumulación y la necesidad de consultar con HR. Sin embargo, podría incluir ejemplos específicos de cómo revisar el saldo de días para ser más completa."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T12:32:01.448509",
+    "question": "la vpn me funciona si voy de vacaciones a estados unidos?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa te funcionará si vas de vacaciones a Estados Unidos, siempre y cuando tengas acceso a internet. Recuerda que es obligatorio utilizar la VPN para acceder a los códigos y plataformas de gestión desde cualquier ubicación fuera de la oficina corporativa.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 8,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante y aborda directamente la pregunta sobre el funcionamiento de la VPN en Estados Unidos. Es completa al mencionar la necesidad de acceso a internet y la obligatoriedad de usar la VPN para acceder a recursos corporativos. La fidelidad es alta, ya que se alinea con el contexto proporcionado sobre el uso de la VPN corporativa."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T12:53:57.376366",
+    "question": "tengo vacaciones disponibles?",
+    "destination": "hr",
+    "response": "Para determinar si tienes vacaciones disponibles, es necesario revisar tu saldo de días de vacaciones acumulados y si has utilizado días en el período correspondiente. Recuerda que las vacaciones no son acumulables de un año a otro, salvo acuerdos extraordinarios aprobados por el área de HR. Te recomiendo que consultes con el área de HR para obtener información específica sobre tu situación.",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante al abordar la consulta sobre las vacaciones disponibles y proporciona información útil sobre la acumulación y caducidad. Sin embargo, podría ser más completa al incluir ejemplos específicos o pasos a seguir para verificar el saldo de días. La fidelidad es alta, ya que se alinea con las políticas mencionadas en el contexto."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T12:54:30.153249",
+    "question": "la vpn funciona si me voy de vacaciones a escocia?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa funcionará si te vas de vacaciones a Escocia, siempre y cuando tengas acceso a Internet. Podrás conectarte a la red corporativa desde cualquier ubicación fuera de la oficina.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 8,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante y directa, abordando la pregunta sobre el funcionamiento de la VPN en Escocia. Es completa, aunque podría incluir detalles sobre posibles restricciones o configuraciones específicas. La fidelidad es alta, ya que se alinea con el contexto proporcionado sobre el uso de la VPN corporativa."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T12:55:04.000961",
+    "question": "me cubren los viaticos si me voy a vivir a escocia?",
+    "destination": "finance",
+    "response": "Lamentablemente, no puedo proporcionar información específica sobre la cobertura de viáticos para situaciones particulares como mudanzas o residencias en el extranjero. Sin embargo, puedo detallar las políticas generales de rendición de viáticos.\n\nLos viáticos se reembolsan únicamente para gastos relacionados con traslados vinculados de forma directa a actividades laborales, como el uso de taxis, remis corporativo, plataformas de transporte (Uber, Cabify, Didi) o peajes. \n\nAdemás, es importante tener en cuenta que todos los rendimientos de viáticos, gastos de representación, compras de emergencia y gastos de movilidad deben presentarse obligatoriamente dentro de los primeros 5 días.\n\nPara obtener información específica sobre su situación, le recomiendo que se comunique con el área de administración o finanzas de su empresa.",
+    "evaluation": {
+      "score_general": 7,
+      "dimensiones": {
+        "relevancia": 6,
+        "completitud": 7,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante en cuanto a la política de viáticos, pero no aborda directamente la pregunta sobre la cobertura para mudanzas a Escocia. Es completa en términos de información general sobre viáticos, y fiel a las políticas descritas, aunque le falta especificidad para el caso planteado."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T12:55:24.906051",
+    "question": "cual es la playa mas linda?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, esa consulta está fuera del ámbito corporativo de Recursos Humanos, Finanzas o Soporte Técnico.",
+    "evaluation": {
+      "score_general": 0,
+      "dimensiones": {
+        "relevancia": 0,
+        "completitud": 0,
+        "fidelidad": 0
+      },
+      "justificacion": "Consulta fuera del dominio soportado por los agentes."
+    }
   }
 ]

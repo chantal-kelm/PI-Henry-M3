@@ -104,19 +104,14 @@ def retrieve_context(retriever, question: str) -> tuple[str, list]:
 
 
 @observe(name="generate_domain_response", as_type="agent")
-def generate_domain_response(agent, agent_input, fallback_question: str):
-    """Ejecuta el agente especializado con fallback compatible."""
+def generate_domain_response(agent, agent_input: dict):
+    """Genera la respuesta usando el contexto recuperado por el pipeline."""
     callbacks = get_langchain_callbacks()
     config = {"callbacks": callbacks} if callbacks else None
 
-    try:
-        if config:
-            return agent.invoke(agent_input, config=config)
-        return agent.invoke(agent_input)
-    except Exception:
-        if config:
-            return agent.invoke(fallback_question, config=config)
-        return agent.invoke(fallback_question)
+    if config:
+        return agent.invoke(agent_input, config=config)
+    return agent.invoke(agent_input)
 
 
 def load_test_queries(filepath: str = "test_queries.json") -> list[dict]:
@@ -236,20 +231,13 @@ def run_pipeline(question: str, session_id: str = "default_session"):
         else:
             agent_res = get_finance_chain()
 
-        # 4. Recuperación del contexto (Manejo robusto para evitar 'dict' object)
-        if isinstance(agent_res, tuple):
-            agent, retriever = agent_res
-            context_text, doc_sources = retrieve_context(retriever, clean_question)
-            agent_input = {
-                "question": clean_question,
-                "context": context_text,
-            }
-        else:
-            agent = agent_res
-            retriever = None
-            doc_sources = []
-            context_text = ""
-            agent_input = clean_question
+        # 4. Recuperación única del contexto
+        agent, retriever = agent_res
+        context_text, doc_sources = retrieve_context(retriever, clean_question)
+        agent_input = {
+            "question": clean_question,
+            "context": context_text,
+        }
 
         if langfuse_client is not None:
             langfuse_client.update_current_span(
@@ -257,12 +245,12 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                     "destination": destination,
                     "retrieved_sources": doc_sources,
                     "retrieved_context_characters": len(context_text),
-                    "has_retriever": retriever is not None,
+                    "has_retriever": True,
                 }
             )
 
         # 5. Ejecutar agente
-        response = generate_domain_response(agent, agent_input, clean_question)
+        response = generate_domain_response(agent, agent_input)
         response_text = ensure_string(response)
 
         # 6. Evaluación

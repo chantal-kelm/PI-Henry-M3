@@ -1,37 +1,35 @@
-import os
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.vectorstores import InMemoryVectorStore
-from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from src.agents.document_loader import load_domain_documents
 
 
 def get_tech_chain():
     """
     Carga la base de conocimiento de Soporte Técnico (IT), aplica fragmentación (chunking),
-    genera los embeddings y retorna la cadena RAG junto con su retriever.
+    genera los embeddings y retorna la cadena de respuesta junto con su retriever.
+
+    El pipeline ejecuta el retriever una sola vez y entrega a la cadena un diccionario
+    con ``question`` y ``context``.
     """
+    raw_docs = load_domain_documents("tech_docs")
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-    
-    raw_docs = []
-    dir_path = "data/tech_docs"
-    if os.path.exists(dir_path):
-        for file in os.listdir(dir_path):
-            file_path = os.path.join(dir_path, file)
-            if os.path.isfile(file_path):
-                with open(file_path, "r", encoding="utf-8") as f:
-                    raw_docs.append(Document(page_content=f.read(), metadata={"source": file}))
 
     # --- FRAGMENTACIÓN / CHUNKING EXPLÍCITA ---
     text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=200,
-    chunk_overlap=40
+        chunk_size=200,
+        chunk_overlap=40,
     )
     docs = text_splitter.split_documents(raw_docs)
-                
+
+    if not docs:
+        raise ValueError("La colección de Tech no generó ningún chunk utilizable.")
+
     vectorstore = InMemoryVectorStore.from_documents(docs, embeddings)
     retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
     
@@ -39,15 +37,11 @@ def get_tech_chain():
         ("system", "Eres un agente experto especializado en Soporte Técnico (IT Support). Responde utilizando ÚNICAMENTE el contexto provisto.\n\nContexto:\n{context}"),
         ("human", "{question}")
     ])
-    
-    format_docs = lambda documents: "\n\n".join(d.page_content for d in documents)
 
-    rag_chain = (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
-        | prompt
+    answer_chain = (
+        prompt
         | llm
         | StrOutputParser()
     )
 
-    # Retornamos la tupla (cadena, retriever) para extraer el contexto real en el pipeline principal
-    return rag_chain, retriever
+    return answer_chain, retriever
