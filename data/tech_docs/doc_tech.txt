@@ -1,4 +1,41 @@
-Manual de Soporte Técnico e IT:
-- Para conectarse a la VPN corporativa se debe utilizar la credencial de FortiClient y el token de doble factor (2FA).
-- En caso de olvido o bloqueo de contraseña, el usuario debe solicitar el blanqueo a través del portal de autogestión de IT.
-- Si la computadora no enciende o presenta pantalla azul, se debe abrir un ticket con prioridad Alta indicando el número de activo del equipo.
+===============================================================================
+MANUAL DE PROCEDIMIENTOS DE SOPORTE TÉCNICO, TI Y SEGURIDAD DE LA INFORMACIÓN
+===============================================================================
+
+1. CREDENCIALES DE ACCESO Y POLÍTICA DE CONTRASEÑAS
+- Autenticación Multifactor Obligatoria (MFA): Toda cuenta corporativa, correo electrónico, acceso a la intranet y plataformas en la nube debe estar protegida de forma estricta mediante autenticación de doble factor (2FA/MFA). La configuración debe realizarse utilizando la aplicación oficial corporativa Authenticator instalada en el dispositivo móvil registrado.
+- Complejidad y Renovación Periodicidad: Las contraseñas corporativas deben renovarse obligatoriamente cada 90 días corridos por exigencias de auditoría e infraestructura. Las nuevas contraseñas deben cumplir con los siguientes estándares de complejidad:
+  * Mínimo obligatorio de 12 a 16 caracteres de longitud.
+  * Incluir una combinación de letras mayúsculas, letras minúsculas, números y al menos un símbolo especial (por ejemplo: @, #, $, %, &).
+  * No contener palabras del diccionario, nombres propios ni secuencias numéricas simples.
+  * No se permite la reutilización de ninguna de las últimas 5 contraseñas utilizadas anteriormente.
+- Custodia de Credenciales: Queda estrictamente prohibido compartir credenciales de acceso con compañeros, terceros o personal externo a la empresa. Se prohíbe explícitamente anotar contraseñas en lugares físicos visibles (notas adhesivas, cuadernos) o almacenarlas en archivos de texto sin cifrar dentro del equipo.
+
+2. CONEXIÓN REMOTA Y USO DE VPN CORPORATIVA
+- Acceso Seguro a la Red Interna: El acceso a los servidores corporativos internos, bases de datos de producción, entornos de desarrollo, repositorios de código y plataformas de gestión desde cualquier ubicación fuera de la oficina corporativa requiere el uso obligatorio e ineludible de la Red Privada Virtual (VPN corporativa).
+- Procedimiento Paso a Paso para Conexión VPN:
+  1. Iniciar la aplicación cliente instalada en el equipo (`FortiClient` o `Cisco AnyConnect`).
+  2. Ingresar la dirección de servidor oficial: `vpn.empresa.com` (o la URL correspondiente al centro de datos asignado).
+  3. Colocar el nombre de usuario institucional y la contraseña corporativa actualizada.
+  4. Confirmar la notificación PUSH de validación de identidad enviada al teléfono móvil mediante la app Authenticator.
+- Diagnóstico Básico y Solución de Problemas: Si el cliente VPN presenta fallas de conexión, caídas intermitentes o errores de autenticación, el usuario debe seguir el protocolo previo a la apertura del ticket: verificar que la conexión a la red Wi-Fi o red local esté activa, reiniciar el servicio de la VPN desde la barra de tareas y reiniciar el equipo informático antes de derivar la falla al área de Soporte Técnico.
+
+3. SOLICITUD, RENOVACIÓN Y CUSTODIA DE HARDWARE Y EQUIPAMIENTO
+- Ciclo de Vida del Equipamiento: Todas las computadoras portátiles (notebooks) asignadas al personal tienen un ciclo de renovación obligatorio de 3 años desde su entrega inicial, momento en el cual el equipo entra en proceso de reemplazo por unidades de última generación.
+- Solicitud de Periféricos y Accesorios: Para solicitar monitores externos, teclados ergonómicos, auriculares con cancelación de ruido, estaciones de acoplamiento (docks) o ratones, el colaborador debe generar una solicitud en la plataforma Jira Service Desk. La solicitud requiere la aprobación formal del manager directo en la plataforma antes de que TI gestione el despacho.
+- Protocolo ante Robo, Pérdida o Extravío: En caso de robo, hurto o pérdida de un equipo corporativo dentro o fuera de la oficina, el colaborador debe:
+  1. Realizar la denuncia policial correspondiente en la comisaría o entidad judicial más cercana dentro de las primeras 24 horas del hecho.
+  2. Notificar inmediatamente a la Guardia de TI vía telefónica o canal de emergencia para ejecutar el protocolo de borrado remoto de datos (`remote wipe`) y revocación de credenciales.
+  3. Adjuntar la copia escaneada de la denuncia policial en el ticket de reposición de hardware.
+
+4. GESTIÓN DE INCIDENTES Y TIEMPOS DE RESPUESTA (SLA)
+- Clasificación de Prioridad de Tickets: Todos los incidentes y solicitudes de soporte técnico se clasifican en la plataforma según la matriz de impacto y urgencia establecida en los Acuerdos de Nivel de Servicio (SLA):
+  * Prioridad Alta (Servicios caídos, servidores no disponibles o bloqueo total de operación): Tiempo de primera respuesta menor a 15 minutos. Tiempo estimado de resolución o mitigación en menos de 2 horas.
+  * Prioridad Media (Falla parcial de programas, errores en software corporativo o mal funcionamiento de periféricos): Tiempo de primera respuesta en menos de 2 horas. Tiempo estimado de solución en un plazo máximo de 24 horas hábiles.
+  * Prioridad Baja (Consultas generales de uso, peticiones de accesos o carpetas compartidas): Tiempo de respuesta en menos de 4 horas hábiles. Tiempo estimado de resolución en un plazo de 48 horas hábiles.
+- Canales Oficiales de Soporte: El único canal válido para el registro, seguimiento y escalamiento de fallas técnicas es la plataforma web de Jira Service Desk o la interacción con el bot interactivo de Slack mediante el comando `/soporte`. No se atienden reclamos por vías informales.
+
+5. SEGURIDAD DE LA INFORMACIÓN, SOFTWARE Y PHISHING
+- Instalación de Programas y licencias: Está estrictamente prohibida la instalación de programas informáticos, software no autorizado, utilitarios de origen desconocido o aplicaciones sin licencia comercial activa en los equipos portátiles de la compañía. Todos los programas requeridos deben instalarse mediante el catálogo de software corporativo administrado por TI.
+- Prevención de Phishing e Ingeniería Social: Ante la recepción de correos electrónicos sospechosos, mensajes no solicitados, solicitudes de cambio de clave no requeridas o archivos adjuntos de dudosa procedencia, el usuario debe abstenerse de hacer clic en enlaces o descargar documentos. Debe presionar de inmediato el botón "Reportar Phishing" integrado en la barra de herramientas de Outlook para que el equipo de ciberseguridad analice el riesgo.
+- Respaldos y Copias de Seguridad (Backup): El respaldo de los archivos de trabajo, proyectos y documentación corporativa se realiza de forma automática y continua en la nube a través de Microsoft OneDrive. Los usuarios son responsables de guardar toda su información laboral dentro de las carpetas sincronizadas para garantizar la recuperación ante fallas de disco o pérdida del equipo.

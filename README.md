@@ -79,7 +79,7 @@ Crea un archivo .env en la raíz del proyecto basándote en .env.example:
 OPENAI_API_KEY=tu_openai_api_key
 LANGFUSE_PUBLIC_KEY=tu_public_key
 LANGFUSE_SECRET_KEY=tu_secret_key
-LANGFUSE_HOST=https://us.cloud.langfuse.com
+LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
 ## 🖥️ Ejecución del Proyecto
@@ -97,12 +97,61 @@ Al estar desarrollado como un paquete modular en la carpeta src/, también se pu
 from src.multi_agent_system import run_pipeline
 ```
 
-# Invocación directa del pipeline completo
+### Invocación directa del pipeline completo
+
+Esta invocación no se pega directamente en `zsh` o `bash`, porque `run_pipeline(...)` es código Python. Tenés tres formas correctas de ejecutarlo:
+
+**Opción 1: REPL de Python**
 
 ```text
+python
+```
+
+Y después, dentro del intérprete:
+
+```python
+from src.multi_agent_system import run_pipeline
 resultado = run_pipeline("¿Cuántos días de vacaciones tengo?")
 print(resultado)
 ```
+
+**Opción 2: One-liner desde terminal**
+
+```text
+python -c 'from src.multi_agent_system import run_pipeline; print(run_pipeline("¿Cuántos días de vacaciones tengo?"))'
+```
+
+**Opción 3: Script Python aparte**
+
+```python
+from src.multi_agent_system import run_pipeline
+
+resultado = run_pipeline("¿Cuántos días de vacaciones tengo?")
+print(resultado)
+```
+
+### Validación automática del routing
+
+Para validar rápidamente que el orquestador cubre las categorías esperadas y los casos borde definidos en `test_queries.json`, ejecutá:
+
+```text
+python -m src.multi_agent_system --run-tests
+```
+
+Este comando corre la suite de consultas de prueba, compara la categoría esperada contra la predicción del router y devuelve un resumen con cobertura y precisión de routing.
+
+![alt text](image-12.png)
+
+### Verificación de chunking por dominio
+Para comprobar que cada colección documental supera el mínimo de 50 chunks exigido por la consigna:
+
+```text
+python script_chunks.py
+```
+
+Este script reutiliza la misma estrategia de fragmentación del sistema productivo y muestra por consola la cantidad de chunks generados para HR, Tech y Finance.
+
+![alt text](image-6.png)
 
 # 💡 Ejemplos de Uso
 
@@ -119,7 +168,7 @@ print(resultado)
 
 ## Ejemplo de consulta `OUT_OF_SCOPE`
 
-![alt text](image.png)
+![alt text](image-11.png)
 
 ## Ejemplo de consulta `HR`
 
@@ -127,11 +176,11 @@ print(resultado)
 
 ## Ejemplo de consulta `FINANCE`
 
-![alt text](image-3.png)
+![alt text](image-9.png)
 
 ## Ejemplo de consulta `TECH`
 
-![alt text](image-4.png)
+![alt text](image-10.png)
 
 ### 📊 Registro de Auditoría Multidimensional (`results_log.json`)
 
@@ -162,24 +211,37 @@ Mientras la consola muestra una salida limpia y rápida para el usuario, cada co
 El sistema integra **Langfuse** para el monitoreo continuo, trazabilidad de llamadas a los agentes y evaluación automatizada de la calidad de las respuestas (RAG Triad).
 
 ### 🔍 Agente Evaluador (`src/evaluator.py`)
-Cada respuesta generada por los agentes especializados es auditada automáticamente por un modelo de lenguaje evaluador (`gpt-4o-mini`) que calcula puntajes en una escala de 0 a 1 (o 1 a 10) en tres dimensiones clave:
+Cada respuesta generada por los agentes especializados es auditada automáticamente por un modelo de lenguaje evaluador (`gpt-4o-mini`) que calcula puntajes en una escala de 1 a 10 en tres dimensiones clave:
 
 * **Relevancia (`relevance`)**: Evalúa si la respuesta aborda directamente la pregunta del usuario.
 * **Completitud (`completeness`)**: Mide si la respuesta brinda toda la información necesaria de forma exhaustiva.
 * **Fidelidad (`accuracy`)**: Verifica que la respuesta se mantenga fiel al contexto de las políticas de la empresa sin alucinar datos.
-* **Calidad General (`overall_quality`)**: Ponderación global del desempeño del agente en la consulta.
+* **Calidad General (`score_general`)**: Ponderación global del desempeño del agente en la consulta.
 
-Los resultados son enviados en tiempo real a Langfuse utilizando la **Score API** vinculados a la traza principal `multi_agent_pipeline`.
+Los resultados se registran en Langfuse utilizando la **Score API** sobre la traza principal `multi_agent_pipeline`, creando scores numéricos para `score_general`, `relevancia`, `completitud` y `fidelidad`, además de un score de texto con la justificación del evaluador.
 
-![Evaluación y Trazabilidad en Langfuse](image-5.png)
+![Evaluación y Trazabilidad en Langfuse](image-8.png)
 
 ## ⚙️ Notas de Configuración y Decisiones Técnicas
 
-* **Manejo de Out-of-Scope:** El filtro por intenciones/palabras clave en la etapa del router evita invocar agentes RAG o llamadas innecesarias a la API cuando las consultas son ajenas al dominio corporativo, retornando un Score de 0 y ahorrando tokens.
+* **Routing con LangChain:** El orquestador usa `ChatPromptTemplate` + `ChatOpenAI` + `StrOutputParser` para clasificar la intención y activar un enrutamiento condicional hacia el agente de dominio correspondiente.
 
-* **Persistencia e Historial Completo:** Todas las ejecuciones se guardan de forma acumulativa en `results_log.json` sin sobrescribir pruebas anteriores. Para mantener la interfaz CLI limpia en consola, el detalle profundo de la auditoría que incluye el desglose de dimensiones (`relevancia`, `completitud`, `fidelidad`) y la `justificacion` narrativa del evaluador se almacena de forma estructurada en este archivo de registros.
+* **RAG especializado por dominio:** Cada agente carga su colección documental, aplica `RecursiveCharacterTextSplitter`, genera embeddings con `OpenAIEmbeddings`, indexa en `InMemoryVectorStore` y responde únicamente con el contexto recuperado.
 
-* **Trazabilidad con Langfuse:** Cada ejecución envía los metadatos y el trace_id al dashboard de Langfuse para monitoreo y auditoría en tiempo real.
+* **Chunking explícito y verificable:** La fragmentación documental usa `RecursiveCharacterTextSplitter` con `chunk_size=200` y `chunk_overlap=40`, buscando equilibrio entre granularidad de recuperación y preservación de contexto. El script `script_chunks.py` permite auditar rápidamente cuántos chunks genera cada dominio y demostrar que se supera el mínimo solicitado.
+
+* **Trazabilidad completa con Langfuse:** El pipeline principal, el router, la recuperación de contexto, la generación de respuesta y el evaluador quedan instrumentados como observaciones independientes. Además, las invocaciones internas de LangChain se exportan mediante `LangchainCallbackHandler`, lo que permite depurar misclassifications, retrievals y respuestas finales dentro del mismo trace.
+
+* **Evaluación automática con Score API:** El evaluador registra scores por dimensión directamente en Langfuse para habilitar análisis continuos de calidad, filtrado por trace y debugging posterior.
+
+* **Persistencia local complementaria:** Todas las ejecuciones se guardan de forma acumulativa en `results_log.json` sin sobrescribir pruebas anteriores. Esto funciona como respaldo local incluso si Langfuse no está configurado en un entorno puntual.
+
+## ✅ Cobertura de Entregables
+
+* **Main notebook / múltiples archivos:** Implementación modular en `src/multi_agent_system.py`, `src/agents/orchestrator.py`, `src/agents/hr_agent.py`, `src/agents/tech_agent.py`, `src/agents/finance_agent.py` y `src/evaluator.py`.
+* **Colecciones de documentos:** `data/hr_docs/`, `data/tech_docs/` y `data/finance_docs/`, con más de 50 chunks por dominio usando la configuración actual de chunking.
+* **Test queries:** `test_queries.json` contiene 12 consultas, cubriendo `hr`, `tech`, `finance` y casos `out_of_scope`.
+* **README:** incluye descripción del proyecto, instalación, configuración, ejecución, pruebas, decisiones técnicas y limitaciones.
 
 ## 📁 Estructura del Proyecto
 

@@ -1,5 +1,54 @@
-Política de Finanzas y Gastos:
-- Los rendimientos de viáticos deben presentarse dentro de los primeros 5 días hábiles de cada mes.
-- El monto máximo permitido para almuerzos o viáticos diarios es de 20.000 pesos.
-- Los reembolsos de gastos se acreditan los días 15 y 30 de cada mes.
-- Para solicitar un reembolso es obligatorio adjuntar la factura B o C a nombre de la empresa.
+===============================================================================
+MANUAL DE POLÍTICAS FINANCIERA, RENDICIÓN DE GASTOS Y VIÁTICOS CORPORATIVOS
+===============================================================================
+
+1. DISPOSICIONES GENERALES Y MARCO REGULATORIO
+La presente política establece las directrices obligatorias, principios normativos y procedimientos operativos para la solicitud, aprobación, ejecución, registro y rendición de gastos operativos, viáticos, viajes de negocios, eventos corporativos y fondos fijos dentro de toda la organización. Todos los colaboradores, independientemente de su jerarquía, antigüedad, departamento o modalidad de contratación (presencial, híbrido o remoto), deben dar estricto y riguroso cumplimiento a las normativas aquí detalladas.
+
+El objetivo central de este reglamento es garantizar la transparencia en el uso de los recursos económicos de la compañía, optimizar los flujos de caja y asegurar el cumplimiento impositivo y legal vigente.
+
+Las excepciones a cualquiera de los puntos de esta política deben contar obligatoriamente con la aprobación previa, expresa y por escrito de la Dirección de Finanzas y del Gerente General de la empresa. Ninguna aprobación verbal o tácita será considerada válida ante las instancias de auditoría interna.
+
+2. RENDICIÓN DE VIÁTICOS Y PLAZOS DE PRESENTACIÓN
+- Plazo de Presentación: Todos los rendimientos de viáticos, gastos de representación, compras de emergencia y gastos de movilidad deben presentarse obligatoriamente dentro de los primeros 5 días hábiles de cada mes posterior a la realización del gasto o a la finalización de la comisión de servicio.
+- Penalización por Presentación Extemporánea: Aquellas rendiciones presentadas fuera del plazo establecido de 5 días hábiles serán rechazadas automáticamente por el sistema de gestión. El saldo no rendido o no justificado será considerado como un anticipo pendiente y podrá ser descontado de manera directa e íntegra de la liquidación de haberes o sueldo del colaborador en el ciclo lectivo inmediato.
+- Procedimiento Digital de Rendición: Las planillas de rendición de gastos deben confeccionarse a través del Portal Web de Finanzas. Cada planilla debe adjuntar los comprobantes fiscales originales escaneados en formato PDF de alta resolución o imagen clara, contando con la firma digital o aprobación en sistema del supervisor directo o Gerente de Área.
+- Modificaciones y Subsanaciones: En caso de que el área de Cuentas a Pagar detecte errores de carga, el colaborador dispondrá de un plazo máximo e improrrogable de 48 horas hábiles para subsanar la documentación requerida antes de que la rendición sea desestimada.
+
+3. TOPES MÁXIMOS PERMITIDOS Y CATEGORÍAS DE GASTOS
+- Gastos de Almuerzo y Viáticos Diarios: El monto tope máximo permitido para almuerzos o viáticos diarios por persona es de 20.000 pesos argentinos. Gastos que superen este límite no serán reembolsados por la compañía, salvo que hayan sido expresamente preaprobados con un mínimo de 24 horas de anticipación por la Gerencia Financiera debido a razones operativas justificadas.
+- Cajas Chicas y Gastos Menores: Se autorizan compras menores de papelería, insumos de oficina, artículos de cafetería o cerrajería de emergencia hasta un tope máximo de 15.000 pesos argentinos por evento mediante el uso del fondo fijo asignado a cada área. No se permite el fraccionamiento de facturas para eludir este límite.
+- Transporte y Movilidad Urbana: Se reembolsará el uso de taxis, remis corporativo, plataformas de transporte (Uber, Cabify, Didi) o peajes únicamente para traslados vinculados de forma directa a reuniones con clientes, trámites oficiales o gestiones operativas fuera de la oficina principal. Se exige presentar el comprobante digital de la plataforma o ticket de peaje original.
+- Gastos de Representación y Agasajos a Clientes: Los eventos de agasajo o almuerzos de negocios con clientes de la cartera corporativa requieren autorización previa del Director Comercial y el gasto total por comensal no podrá exceder el equivalente a dos viáticos diarios vigentes.
+
+4. REQUISITOS OBLIGATORIOS PARA REEMBOLSOS Y COMPROBANTES FISCALES
+- Comprobantes Válidos: Para que una solicitud de reembolso sea procesada, es condición excluyente adjuntar factura tipo B o C emitida legalmente ante el organismo fiscal a nombre de la empresa, incluyendo la Razón Social exacta y el número de CUIT corporativo correspondiente.
+- Exclusiones Directas y Restricciones: No se aceptarán bajo ninguna circunstancia los siguientes documentos:
+  * Comprobantes no fiscales, comanda de restaurante, vales internos, notas de pedido o tickets borrador.
+  * Facturas tipo A (salvo previa autorización expresa y por escrito del área impositiva y contable para compras mayoristas específicas).
+  * Facturas emitidas a nombre personal del empleado, de un familiar o de terceros ajenos a la firma corporativa.
+  * Comprobantes que presenten enmiendas, tachaduras, roturas o datos ilegibles en el importe o la fecha.
+- Cargas e Impuestos: Todos los comprobantes deben contener el detalle desagregado de los artículos o servicios adquiridos. No se aceptarán comprobantes genéricos que indiquen únicamente conceptos como "consumo" o "varios".
+
+5. FECHAS Y CRONOGRAMA DE ACREDITACIÓN DE REEMBOLSOS
+- Calendario de Acreditaciones: Los reembolsos de gastos aprobados se acreditarán de forma fija y regular los días 15 y 30 de cada mes (o el día hábil inmediato anterior en caso de coincidir con fines de semana o feriados nacionales).
+- Tramo 1 de Liquidación: Aquellas rendiciones ingresadas, verificadas y aprobadas en el portal entre los días 1 y 10 de cada mes se liquidarán y transferirán el día 15 del mismo mes.
+- Tramo 2 de Liquidación: Las rendiciones ingresadas, verificadas y aprobadas entre los días 11 y 25 de cada mes se liquidarán y transferirán el día 30 del mismo mes.
+- Modificaciones al Cronograma: Aquellas rendiciones aprobadas con posterioridad al día 25 de cada mes ingresarán automáticamente en el primer tramo del mes subsiguiente sin excepción alguna.
+
+6. VIAJES DE NEGOCIOS, ALOJAMIENTO Y PASAJES
+- Planificación y Anticipación: La solicitud y reserva de pasajes aéreos, pasajes terrestres de larga distancia y alojamiento corporativo debe tramitarse con un mínimo obligatorio de 14 días corridos de anticipación a la fecha del viaje mediante la agencia de viajes corporativa oficial designada por la empresa.
+- Categoría de Pasajes: La categoría autorizada para traslados aéreos tanto en vuelos nacionales como internacionales es estrictamente Clase Económica. Las mejoras de categoría (Business o Primera Clase) correrán 100% a cuenta y cargo del colaborador.
+- Cobertura de Alojamiento: El gasto de alojamiento corporativo cubierto por la compañía incluye exclusivamente la tarifa de la habitación, impuestos hoteleros e internet de alta velocidad.
+- Gastos No Reembolsables durante Viajes: Quedan expresamente excluidos de reembolso los gastos extras en el hotel tales como consumos de minibar, llamadas internacionales no laborales, servicio de lavandería personal, alquiler de películas pagas, uso de spa o consumo de servicio a la habitación fuera del horario laboral.
+
+7. TARJETAS CORPORATIVAS Y FONDOS ROTATORIOS
+- Asignación y Titularidad: Las tarjetas de crédito o débito corporativas son herramientas de trabajo de uso personal, nominativo e intransferible, destinadas exclusivamente a puestos directivos, jefaturas o personal de operaciones de campo autorizados.
+- Usos Prohibidos de la Tarjeta: Está terminantemente prohibido utilizar la tarjeta corporativa para realizar compras o gastos de índole personal, financiar consumos particulares en cuotas no autorizadas, pagar suscripciones privadas o realizar retiros de dinero en efectivo en cajeros automáticos (cajeros ATM).
+- Conciliación Mensual: El resumen mensual de consumos de la tarjeta corporativa debe ser conciliado en el portal corporativo, adjuntando la totalidad de sus respectivos comprobantes fiscales de respaldo, antes del día 20 de cada mes.
+- Bloqueo por Incumplimiento: La falta de presentación de los comprobantes de respaldo en la fecha límite estipulada provocará la suspensión e inhabilitación inmediata de la tarjeta corporativa.
+
+8. AUDITORÍA, CONTROL Y RÉGIMEN DISCIPLINARIO
+- Control y Monitoreo Continuo: El área de Finanzas, Contabilidad Interna y Control de Gestión realiza auditorías aleatorias, periódicas y sistemáticas sobre la totalidad de las rendiciones presentadas en el sistema.
+- Sanciones por Irregularidades: En caso de detectarse anomalías tales como duplicidad de facturas, alteración de montos, presentación de tickets apócrifos o uso indebido de los fondos asignados, se interrumpirá de inmediato el proceso de reembolso.
+- Proceso Disciplinario: Dichas faltas serán elevadas al área de Recursos Humanos y al Departamento Legales para iniciar las sanciones disciplinarias correspondientes, que pueden incluir desde apercibimientos formales, la suspensión del colaborador o el despido con causa justificada, según la gravedad de la falta cometida y las leyes laborales vigentes.

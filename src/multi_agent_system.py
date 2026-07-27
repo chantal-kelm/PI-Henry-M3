@@ -1,160 +1,345 @@
 import os
+import sys
 import json
+from datetime import datetime
+
 from dotenv import load_dotenv
-from langfuse import Langfuse
-from langfuse.callback import CallbackHandler
+from langfuse import observe, propagate_attributes
+
 from src.agents.orchestrator import get_orchestrator_chain
 from src.agents.hr_agent import get_hr_chain
 from src.agents.tech_agent import get_tech_chain
 from src.agents.finance_agent import get_finance_chain
 from src.evaluator import evaluate_response
-from datetime import datetime
+from src.langfuse_utils import (
+    get_langchain_callbacks,
+    get_langfuse_client,
+    is_langfuse_enabled,
+)
 
 load_dotenv()
 
-# 2. Inicializamos el cliente global con debug=True
-langfuse_client = Langfuse(
-    public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
-    secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
-    host=os.getenv("LANGFUSE_HOST"),
-    debug=False
-)
 
 def save_to_log(data: dict, filepath: str = "results_log.json"):
-    """Guarda las ejecuciones de forma acumulativa en un archivo JSON."""
+    """Guarda las ejecuciones de forma acumulativa en un archivo JSON local."""
     log_entry = {
         "timestamp": datetime.now().isoformat(),
-        **data
+        **data,
     }
+
     logs = []
+
     if os.path.exists(filepath):
         try:
             with open(filepath, "r", encoding="utf-8") as f:
                 logs = json.load(f)
         except Exception:
             logs = []
-            
+
     logs.append(log_entry)
-    
+
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(logs, f, ensure_ascii=False, indent=2)
 
-def run_pipeline(question: str):
-    # 1. Inicializamos el cliente principal de Langfuse
-    langfuse_client = Langfuse(
-        public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
-        secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
-        host=os.getenv("LANGFUSE_HOST")
-    )
-    
-    # 2. Creamos la traza padre
-    trace = langfuse_client.trace(
-        name="multi_agent_pipeline",
-        input=question
-    )
-    
-    # 3. Handler nativo para LangChain derivado de esta traza
-    langfuse_handler = trace.get_langchain_handler()
 
+def ensure_string(val) -> str:
+    """Garantiza la conversión de cualquier objeto a una cadena de texto (PyString)."""
+    if isinstance(val, str):
+        return val
+
+    if isinstance(val, dict):
+        for key in ["output", "answer", "result", "text"]:
+            if key in val and isinstance(val[key], str):
+                return val[key]
+
+        return json.dumps(val, ensure_ascii=False)
+
+    if hasattr(val, "content"):
+        return str(val.content)
+
+    return str(val)
+
+
+@observe(name="route_intent", as_type="chain")
+def route_intent(question: str) -> str:
+    """Clasifica la consulta del usuario y retorna la etiqueta del dominio."""
     orchestrator = get_orchestrator_chain()
-    
-    try:
-        q_clean = question.lower()
-        
-        hr_keywords = ["vacaciones", "ley", "rrhh", "recursos humanos", "dias", "días", "licencia", "sueldo"]
-        finance_keywords = ["viaticos", "viáticos", "gastos", "finanzas", "reembolso", "limite", "límite", "factura", "pago", "saldo"]
-        tech_keywords = ["vpn", "computadora", "error", "credenciales", "enciende", "password", "sistema", "soporte"]
-        
-        if any(w in q_clean for w in hr_keywords):
-            destination = "hr"
-        elif any(w in q_clean for w in finance_keywords):
-            destination = "finance"
-        elif any(w in q_clean for w in tech_keywords):
-            destination = "tech"
-        else:
-            print("--- ROUTER: Pregunta fuera de ámbito (Out of Scope) ---")
-            out_res = {
-                "question": question,
-                "destination": "out_of_scope",
-                "response": "Lo siento, pero esa consulta está fuera del ámbito de este sistema. Solo puedo ayudarte con temas de Tech, RH o Finance.",
-                "evaluation": {"score_general": 0}
-            }
-            trace.update(output=out_res["response"])
-            save_to_log(out_res)
-            return out_res
-            
-        print(f"--- ROUTER (Bypass Activo): {destination.upper()} ---")
-    except Exception as e:
-        print(f"Error en el router: {e}")
-        destination = "tech"
-        
-    if destination == "hr":
-        agent = get_hr_chain()
-    elif destination == "tech":
-        agent = get_tech_chain()
-    else:
-        agent = get_finance_chain()
-        
-    try:
-        # 4. Invocar el agente pasando el handler
-        response = agent.invoke(question, config={"callbacks": [langfuse_handler]})
-        
-        # Actualizamos la traza con la respuesta final
-        trace.update(output=response)
-        
-        # 5. Evaluamos pasando el objeto trace
-        eval_res = evaluate_response(
-            question=question, 
-            response=response, 
-            context="", 
-            trace=trace
-        )
-        
-        result_data = {
-            "question": question,
-            "destination": destination,
-            "response": response,
-            "evaluation": eval_res
-        }
-        
-        save_to_log(result_data)
-        return result_data
+    callbacks = get_langchain_callbacks()
 
-    finally:
-        # ESTO GARANTIZA QUE SÍ O SÍ SE TRANSMITAN LOS DATOS A LANGFUSE
-        langfuse_client.flush()
+    raw_destination = orchestrator.invoke(
+        {"question": question},
+        config={"callbacks": callbacks} if callbacks else None,
+    )
+
+    destination = ensure_string(raw_destination).strip().lower()
+    return destination if destination in ["hr", "finance", "tech"] else "out_of_scope"
+
+
+@observe(name="retrieve_context", as_type="retriever")
+def retrieve_context(retriever, question: str) -> tuple[str, list]:
+    """Obtiene y serializa los documentos más relevantes para la pregunta."""
+    callbacks = get_langchain_callbacks()
+    docs = retriever.invoke(
+        question,
+        config={"callbacks": callbacks} if callbacks else None,
+    )
+
+    context_parts = []
+    doc_sources = []
+
+    for doc in docs:
+        if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
+            source = doc.metadata.get("source")
+            if source:
+                doc_sources.append(source)
+
+        if hasattr(doc, "page_content"):
+            context_parts.append(str(doc.page_content))
+        elif isinstance(doc, dict):
+            context_parts.append(doc.get("page_content", json.dumps(doc, ensure_ascii=False)))
+        else:
+            context_parts.append(str(doc))
+
+    return "\n\n".join(context_parts), doc_sources
+
+
+@observe(name="generate_domain_response", as_type="agent")
+def generate_domain_response(agent, agent_input, fallback_question: str):
+    """Ejecuta el agente especializado con fallback compatible."""
+    callbacks = get_langchain_callbacks()
+    config = {"callbacks": callbacks} if callbacks else None
+
+    try:
+        if config:
+            return agent.invoke(agent_input, config=config)
+        return agent.invoke(agent_input)
+    except Exception:
+        if config:
+            return agent.invoke(fallback_question, config=config)
+        return agent.invoke(fallback_question)
+
+
+def load_test_queries(filepath: str = "test_queries.json") -> list[dict]:
+    """Carga el set de consultas de prueba definido para el proyecto."""
+    with open(filepath, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@observe(name="routing_test_suite", as_type="chain")
+def run_test_suite(filepath: str = "test_queries.json") -> dict:
+    """Ejecuta pruebas de routing y resume cobertura y precisión."""
+    queries = load_test_queries(filepath)
+    results = []
+
+    for item in queries:
+        predicted = route_intent(item["question"])
+        results.append(
+            {
+                "question": item["question"],
+                "expected": item["expected"],
+                "predicted": predicted,
+                "match": predicted == item["expected"],
+            }
+        )
+
+    total = len(results)
+    passed = sum(1 for item in results if item["match"])
+    accuracy = round((passed / total) * 100, 2) if total else 0.0
+    covered_labels = sorted({item["expected"] for item in results})
+
+    return {
+        "total_queries": total,
+        "passed": passed,
+        "failed": total - passed,
+        "routing_accuracy_percent": accuracy,
+        "covered_labels": covered_labels,
+        "results": results,
+    }
+
+
+@observe(name="multi_agent_pipeline", as_type="chain")
+def run_pipeline(question: str, session_id: str = "default_session"):
+
+    clean_question = ensure_string(question)
+    langfuse_client = get_langfuse_client() if is_langfuse_enabled() else None
+
+    with propagate_attributes(
+        session_id=session_id,
+        trace_name="multi_agent_pipeline",
+        metadata={"entrypoint": "run_pipeline"},
+        tags=["multi-agent", "langchain", "rag"],
+    ):
+        if langfuse_client is not None:
+            langfuse_client.update_current_span(
+                input={"question": clean_question, "session_id": session_id}
+            )
+
+        # 1. Router
+        destination = route_intent(clean_question)
+
+        # 2. Fuera de alcance
+        if destination == "out_of_scope":
+
+            response_text = (
+                "Lo siento, esa consulta está fuera del ámbito corporativo "
+                "de Recursos Humanos, Finanzas o Soporte Técnico."
+            )
+
+            result = {
+                "question": clean_question,
+                "destination": destination,
+                "response": response_text,
+                "evaluation": {
+                    "score_general": 0,
+                    "dimensiones": {
+                        "relevancia": 0,
+                        "completitud": 0,
+                        "fidelidad": 0,
+                    },
+                    "justificacion": "Consulta fuera del dominio soportado por los agentes.",
+                },
+            }
+
+            if langfuse_client is not None:
+                langfuse_client.update_current_span(
+                    metadata={"destination": destination, "out_of_scope": True}
+                )
+                langfuse_client.score_current_trace(
+                    name="score_general",
+                    value=0,
+                    data_type="NUMERIC",
+                    comment="Consulta clasificada como fuera de alcance.",
+                    metadata={"destination": destination},
+                )
+                for metric_name in ("relevancia", "completitud", "fidelidad"):
+                    langfuse_client.score_current_trace(
+                        name=metric_name,
+                        value=0,
+                        data_type="NUMERIC",
+                        comment="Consulta clasificada como fuera de alcance.",
+                        metadata={"destination": destination},
+                    )
+                langfuse_client.update_current_span(output=result)
+                langfuse_client.flush()
+
+            save_to_log(result)
+
+            return result
+
+        # 3. Selección del agente
+        if destination == "hr":
+            agent_res = get_hr_chain()
+
+        elif destination == "tech":
+            agent_res = get_tech_chain()
+
+        else:
+            agent_res = get_finance_chain()
+
+        # 4. Recuperación del contexto (Manejo robusto para evitar 'dict' object)
+        if isinstance(agent_res, tuple):
+            agent, retriever = agent_res
+            context_text, doc_sources = retrieve_context(retriever, clean_question)
+            agent_input = {
+                "question": clean_question,
+                "context": context_text,
+            }
+        else:
+            agent = agent_res
+            retriever = None
+            doc_sources = []
+            context_text = ""
+            agent_input = clean_question
+
+        if langfuse_client is not None:
+            langfuse_client.update_current_span(
+                metadata={
+                    "destination": destination,
+                    "retrieved_sources": doc_sources,
+                    "retrieved_context_characters": len(context_text),
+                    "has_retriever": retriever is not None,
+                }
+            )
+
+        # 5. Ejecutar agente
+        response = generate_domain_response(agent, agent_input, clean_question)
+        response_text = ensure_string(response)
+
+        # 6. Evaluación
+        eval_res = evaluate_response(
+            question=clean_question,
+            response=response_text,
+            context=context_text,
+            destination=destination,
+        )
+
+        result = {
+            "question": clean_question,
+            "destination": destination,
+            "response": response_text,
+            "evaluation": eval_res,
+        }
+
+        if langfuse_client is not None:
+            langfuse_client.update_current_span(output=result)
+            langfuse_client.flush()
+
+        save_to_log(result)
+
+        return result
+
 
 if __name__ == "__main__":
-    print("=" * 50)
-    print("🤖 SISTEMA MULTIAGENTE INTERACTIVO ACTIVO")
+
+    if "--run-tests" in sys.argv:
+        summary = run_test_suite()
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        raise SystemExit(0)
+
+    print("\n🤖 SISTEMA MULTIAGENTE INTERACTIVO ACTIVO")
     print("Escribí tu pregunta y presioná Enter.")
-    print("Para salir, escribí 'salir', 'exit' o 'q'.")
-    print("=" * 50)
-    
+    print("Para salir escribí 'salir', 'exit' o 'q'.")
+
     while True:
+
         try:
-            user_question = input("\n📝 Ingresá tu pregunta: ").strip()
-            
-            if user_question.lower() in ["salir", "exit", "q"]:
-                print("\n👋 ¡Nos vemos! Cerrando el sistema...")
-                break
-                
-            if not user_question:
+
+            user_input = input("\n📝 Ingresá tu pregunta: ").strip()
+
+            if not user_input:
                 continue
-                
-            print("\nProcesando...")
-            res = run_pipeline(user_question)
-            
-            print("-" * 40)
-            print(f"🎯 Destino Detectado: {res['destination'].upper()}")
-            print(f"🤖 Respuesta del Agente:\n{res['response']}")
-            
-            score = res['evaluation'].get('score_general', res['evaluation'].get('score', 0))
-            print(f"📊 Evaluación (Score): {score}")
-            print("-" * 40)
-            
+
+            if user_input.lower() in ["salir", "exit", "q"]:
+                print("¡Hasta luego!")
+                break
+
+            result = run_pipeline(user_input)
+
+            eval_data = result.get("evaluation", {})
+
+            print("\n" + "=" * 50)
+            print(f"🎯 Destino: {result['destination'].upper()}")
+            print(f"💬 Respuesta: {result['response']}")
+            print("-" * 50)
+
+            if isinstance(eval_data, dict):
+
+                score = eval_data.get('score_general') or eval_data.get('score')
+                print(f"⭐ Score: {score if score is not None else 'N/A'}")
+
+                just = eval_data.get("justificacion") or eval_data.get("reasoning") or eval_data.get("feedback")
+
+                if just:
+                    print(f"📝 Justificación: {just}")
+
+            else:
+                print(eval_data)
+
+            print("=" * 50)
+
         except KeyboardInterrupt:
-            print("\n\n👋 Ejecución cancelada por el usuario. ¡Adiós!")
+            print("\nEjecución cancelada.")
             break
+
         except Exception as e:
-            print(f"❌ Ocurrió un error al procesar la pregunta: {e}")
+            print(f"\n❌ Error: {e}")
