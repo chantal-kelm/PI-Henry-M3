@@ -456,5 +456,21 @@
       },
       "justificacion": "La respuesta aborda directamente la pregunta sobre la posibilidad de presentar gastos de Uber como viáticos, explicando que solo se reembolsan traslados vinculados a actividades laborales específicas. Además, incluye una recomendación para consultar con el área de administración o finanzas, lo que añade claridad y apoyo a la respuesta."
     }
+  },
+  {
+    "timestamp": "2026-07-27T17:19:31.014902",
+    "question": "cuantos dias tengo de vacaciones?",
+    "destination": "hr",
+    "response": "Para determinar cuántos días de vacaciones tienes, es necesario conocer la política específica de la empresa en la que trabajas, así como el tiempo que has estado empleado. Generalmente, las vacaciones no son acumulables de un año a otro, salvo acuerdos extraordinarios aprobados por el área de HR. Te recomiendo que consultes con el área de Recursos Humanos de tu empresa para obtener información precisa sobre tus días de vacaciones disponibles.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre los días de vacaciones, explicando que depende de la política de la empresa y el tiempo de empleo. Además, menciona la acumulación de días y sugiere consultar con Recursos Humanos, lo que es relevante y completo según el contexto proporcionado."
+    }
   }
 ]

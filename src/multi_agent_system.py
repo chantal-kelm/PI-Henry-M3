@@ -7,12 +7,17 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from langfuse import observe, propagate_attributes
-from langchain_core.runnables import RunnableBranch, RunnableLambda
+from langchain_core.runnables import (
+    Runnable,
+    RunnableBranch,
+    RunnableLambda,
+    RunnablePassthrough,
+)
 
 from src.agents.orchestrator import get_orchestrator_chain
-from src.agents.hr_agent import get_hr_chain
-from src.agents.tech_agent import get_tech_chain
-from src.agents.finance_agent import get_finance_chain
+from src.agents.hr_agent import get_hr_rag_chain
+from src.agents.tech_agent import get_tech_rag_chain
+from src.agents.finance_agent import get_finance_rag_chain
 from src.evaluator import build_not_applicable_evaluation, evaluate_response
 from src.langfuse_utils import (
     get_langchain_callbacks,
@@ -70,6 +75,12 @@ def ensure_string(val) -> str:
     return str(val)
 
 
+def normalize_destination(raw_destination) -> str:
+    """Normaliza la salida del clasificador al contrato público del router."""
+    destination = ensure_string(raw_destination).strip().lower()
+    return destination if destination in SUPPORTED_DESTINATIONS else "out_of_scope"
+
+
 @observe(name="route_intent", as_type="chain")
 def route_intent(question: str) -> str:
     """Clasifica la consulta del usuario y retorna la etiqueta del dominio."""
@@ -81,90 +92,68 @@ def route_intent(question: str) -> str:
         config={"callbacks": callbacks} if callbacks else None,
     )
 
-    destination = ensure_string(raw_destination).strip().lower()
-    return destination if destination in SUPPORTED_DESTINATIONS else "out_of_scope"
+    return normalize_destination(raw_destination)
 
 
-@observe(name="retrieve_context", as_type="retriever")
-def retrieve_context(retriever, question: str) -> tuple[str, list]:
-    """Obtiene y serializa los documentos más relevantes para la pregunta."""
-    callbacks = get_langchain_callbacks()
-    docs = retriever.invoke(
-        question,
-        config={"callbacks": callbacks} if callbacks else None,
-    )
-
-    context_parts = []
-    doc_sources = []
-
-    for doc in docs:
-        if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
-            source = doc.metadata.get("source")
-            if source:
-                doc_sources.append(source)
-
-        if hasattr(doc, "page_content"):
-            context_parts.append(str(doc.page_content))
-        elif isinstance(doc, dict):
-            context_parts.append(doc.get("page_content", json.dumps(doc, ensure_ascii=False)))
-        else:
-            context_parts.append(str(doc))
-
-    return "\n\n".join(context_parts), doc_sources
-
-
-@observe(name="generate_domain_response", as_type="agent")
-def generate_domain_response(agent, agent_input: dict):
-    """Genera la respuesta usando el contexto recuperado por el pipeline."""
-    callbacks = get_langchain_callbacks()
-    config = {"callbacks": callbacks} if callbacks else None
-
-    if config:
-        return agent.invoke(agent_input, config=config)
-    return agent.invoke(agent_input)
+def build_out_of_scope_response(route_input: dict) -> dict:
+    """Construye la salida estática de la rama fuera de alcance."""
+    return {
+        "question": route_input["question"],
+        "destination": "out_of_scope",
+        "context": "",
+        "doc_sources": [],
+        "response": (
+            "Lo siento, esa consulta está fuera del ámbito corporativo "
+            "de Recursos Humanos, Finanzas o Soporte Técnico."
+        ),
+    }
 
 
 def get_conditional_agent_router() -> RunnableBranch:
-    """Construye el enrutamiento condicional LCEL hacia el agente especializado."""
+    """Enruta y ejecuta el agente RAG LCEL completo del dominio seleccionado."""
     return RunnableBranch(
         (
             lambda route_input: route_input["destination"] == "hr",
-            RunnableLambda(lambda _route_input: get_hr_chain()).with_config(
-                run_name="select_hr_agent"
+            RunnableLambda(lambda _route_input: get_hr_rag_chain()).with_config(
+                run_name="execute_hr_rag_agent"
             ),
         ),
         (
             lambda route_input: route_input["destination"] == "tech",
-            RunnableLambda(lambda _route_input: get_tech_chain()).with_config(
-                run_name="select_tech_agent"
+            RunnableLambda(lambda _route_input: get_tech_rag_chain()).with_config(
+                run_name="execute_tech_rag_agent"
             ),
         ),
         (
             lambda route_input: route_input["destination"] == "finance",
-            RunnableLambda(lambda _route_input: get_finance_chain()).with_config(
-                run_name="select_finance_agent"
+            RunnableLambda(lambda _route_input: get_finance_rag_chain()).with_config(
+                run_name="execute_finance_rag_agent"
             ),
         ),
-        RunnableLambda(lambda _route_input: None).with_config(
-            run_name="select_out_of_scope"
+        RunnableLambda(build_out_of_scope_response).with_config(
+            run_name="handle_out_of_scope"
         ),
     )
 
 
-@observe(name="select_domain_agent", as_type="chain")
-def select_domain_agent(destination: str, question: str):
-    """Delega mediante RunnableBranch únicamente al agente del dominio elegido."""
-    callbacks = get_langchain_callbacks()
-    config = {
-        "callbacks": callbacks,
-        "metadata": {"destination": destination},
-        "run_name": "conditional_agent_routing",
-    }
+def get_multi_agent_orchestrator() -> Runnable:
+    """
+    Construye el workflow dinámico completo de clasificación y delegación.
 
-    return get_conditional_agent_router().invoke(
-        {"destination": destination, "question": question},
-        config=config,
-    )
+    La salida del clasificador alimenta un RunnableBranch que ejecuta dentro de
+    la rama elegida la recuperación y generación del agente RAG especializado.
+    """
+    intent_classifier = (
+        get_orchestrator_chain()
+        | RunnableLambda(normalize_destination).with_config(
+            run_name="normalize_destination"
+        )
+    ).with_config(run_name="route_intent")
+
+    return (
+        RunnablePassthrough.assign(destination=intent_classifier)
+        | get_conditional_agent_router()
+    ).with_config(run_name="multi_agent_orchestrator")
 
 
 def validate_test_queries(queries: object) -> list[dict]:
@@ -303,18 +292,22 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                 input={"question": clean_question, "session_id": session_id}
             )
 
-        # 1. Router
-        destination = route_intent(clean_question)
-        agent_res = select_domain_agent(destination, clean_question)
+        # 1. Workflow LangChain completo:
+        # clasificación -> routing condicional -> recuperación -> generación.
+        callbacks = get_langchain_callbacks()
+        orchestrator = get_multi_agent_orchestrator()
+        agent_result = orchestrator.invoke(
+            {"question": clean_question},
+            config={
+                "callbacks": callbacks,
+                "metadata": {"session_id": session_id},
+            },
+        )
+        destination = agent_result["destination"]
+        response_text = ensure_string(agent_result["response"])
 
         # 2. Fuera de alcance
-        if agent_res is None:
-
-            response_text = (
-                "Lo siento, esa consulta está fuera del ámbito corporativo "
-                "de Recursos Humanos, Finanzas o Soporte Técnico."
-            )
-
+        if destination == "out_of_scope":
             result = {
                 "question": clean_question,
                 "destination": destination,
@@ -349,13 +342,9 @@ def run_pipeline(question: str, session_id: str = "default_session"):
 
             return result
 
-        # 3. Recuperación única del contexto
-        agent, retriever = agent_res
-        context_text, doc_sources = retrieve_context(retriever, clean_question)
-        agent_input = {
-            "question": clean_question,
-            "context": context_text,
-        }
+        # 3. La rama RAG ya ejecutó una única recuperación y la generación.
+        context_text = ensure_string(agent_result["context"])
+        doc_sources = agent_result["doc_sources"]
 
         if langfuse_client is not None:
             langfuse_client.update_current_span(
@@ -367,11 +356,7 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                 }
             )
 
-        # 4. Ejecutar agente
-        response = generate_domain_response(agent, agent_input)
-        response_text = ensure_string(response)
-
-        # 5. Evaluación
+        # 4. Evaluación
         eval_res = evaluate_response(
             question=clean_question,
             response=response_text,

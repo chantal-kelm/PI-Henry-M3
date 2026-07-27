@@ -229,8 +229,10 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 
 * **Routing condicional con LangChain:** El orquestador usa
   `ChatPromptTemplate` + `ChatOpenAI` + `StrOutputParser`. Su clasificación
-  alimenta un `RunnableBranch` de LCEL cuyos handlers `RunnableLambda`
-  inicializan de forma lazy únicamente el agente especializado seleccionado.
+  alimenta directamente un `RunnableBranch` de LCEL. Cada handler
+  `RunnableLambda` inicializa de forma lazy y ejecuta un agente RAG completo:
+  recuperación del dominio, preparación del contexto y generación de la
+  respuesta. La pregunta atraviesa todo ese workflow dentro de LangChain.
 
 * **RAG especializado por dominio:** Cada agente carga su colección, aplica
   `RecursiveCharacterTextSplitter`, genera embeddings con
@@ -275,6 +277,7 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 │   │   ├── document_loader.py  # Carga validada de las colecciones
 │   │   ├── finance_agent.py
 │   │   ├── hr_agent.py
+│   │   ├── rag_chain.py        # Workflow RAG LCEL compartido
 │   │   ├── orchestrator.py
 │   │   └── tech_agent.py
 │   ├── evaluator.py            # Auditor externo de calidad

@@ -7,6 +7,7 @@ from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.agents.document_loader import load_domain_documents
+from src.agents.rag_chain import build_domain_rag_chain
 
 
 @lru_cache(maxsize=1)
@@ -49,3 +50,10 @@ def get_tech_chain():
     )
 
     return answer_chain, retriever
+
+
+@lru_cache(maxsize=1)
+def get_tech_rag_chain():
+    """Retorna el agente RAG completo de Tech como un único Runnable LCEL."""
+    answer_chain, retriever = get_tech_chain()
+    return build_domain_rag_chain(answer_chain, retriever, domain="tech")
