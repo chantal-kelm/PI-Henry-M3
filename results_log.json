@@ -472,5 +472,53 @@
       },
       "justificacion": "La respuesta aborda directamente la pregunta sobre los días de vacaciones, explicando que depende de la política de la empresa y el tiempo de empleo. Además, menciona la acumulación de días y sugiere consultar con Recursos Humanos, lo que es relevante y completo según el contexto proporcionado."
     }
+  },
+  {
+    "timestamp": "2026-07-27T17:20:34.044932",
+    "question": "cuantos remises me puedo tomar al mes para que me lo cubra viaticos?",
+    "destination": "finance",
+    "response": "Las políticas generales de rendición de viáticos establecen que se reembolsará el uso de taxis, remis corporativo y plataformas de transporte únicamente para traslados vinculados de forma directa a actividades laborales. Sin embargo, no se especifica un número máximo de remises que se pueden tomar al mes. \n\nEs importante tener en cuenta que el gasto total por comensal no podrá exceder el equivalente a dos viáticos diarios vigentes. Para obtener información más específica sobre su situación particular, le recomiendo que se comunique con el área de administración o finanzas.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 8.33,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 5,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre el número de remises cubiertos por viáticos, pero no proporciona un límite específico, lo que afecta la completitud. Sin embargo, todas las afirmaciones están respaldadas por el contexto."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T17:20:56.097922",
+    "question": "la vpn funciona en mexico?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa funciona en México, siempre y cuando tengas acceso a internet y sigas los procedimientos establecidos para conectarte a la red. Recuerda que es obligatorio utilizar la VPN para acceder a código y plataformas de gestión desde cualquier ubicación fuera de la oficina corporativa.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre el funcionamiento de la VPN en México, explicando que es funcional siempre que se tenga acceso a internet y se sigan los procedimientos establecidos. Además, menciona la obligatoriedad de su uso para acceder a recursos corporativos, lo cual está respaldado por el contexto proporcionado."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T17:21:04.913262",
+    "question": "cual es la playa mas linda?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, esa consulta está fuera del ámbito corporativo de Recursos Humanos, Finanzas o Soporte Técnico.",
+    "evaluation": {
+      "status": "not_applicable",
+      "score_general": null,
+      "dimensiones": {
+        "relevancia": null,
+        "completitud": null,
+        "fidelidad": null
+      },
+      "justificacion": "Consulta fuera del dominio soportado por los agentes."
+    }
   }
 ]
