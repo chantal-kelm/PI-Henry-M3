@@ -328,5 +328,21 @@
       },
       "justificacion": "Consulta fuera del dominio soportado por los agentes."
     }
+  },
+  {
+    "timestamp": "2026-07-27T13:34:05.144316",
+    "question": "cual es la fecha limite para rendir gastos de viaticos?",
+    "destination": "finance",
+    "response": "La fecha límite para rendir gastos de viáticos es dentro de los primeros 5 días posteriores a la realización de los mismos. Es importante tener en cuenta que los gastos que superen este límite no serán reembolsados por la compañía, a menos que hayan sido expresamente preaprobados con un mínimo de 24 horas de anticipación por la Gerencia Financiera. Para cualquier consulta específica sobre su caso particular, le recomiendo dirigirse al área de administración o finanzas.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre la fecha límite para rendir gastos de viáticos, proporcionando información completa y precisa que coincide con el contexto recuperado. Además, menciona la política de reembolso y la necesidad de preaprobación, lo que añade valor a la respuesta."
+    }
   }
 ]

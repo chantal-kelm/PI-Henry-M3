@@ -12,7 +12,7 @@ from src.agents.orchestrator import get_orchestrator_chain
 from src.agents.hr_agent import get_hr_chain
 from src.agents.tech_agent import get_tech_chain
 from src.agents.finance_agent import get_finance_chain
-from src.evaluator import evaluate_response
+from src.evaluator import build_not_applicable_evaluation, evaluate_response
 from src.langfuse_utils import (
     get_langchain_callbacks,
     get_langfuse_client,
@@ -274,15 +274,9 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                 "question": clean_question,
                 "destination": destination,
                 "response": response_text,
-                "evaluation": {
-                    "score_general": 0,
-                    "dimensiones": {
-                        "relevancia": 0,
-                        "completitud": 0,
-                        "fidelidad": 0,
-                    },
-                    "justificacion": "Consulta fuera del dominio soportado por los agentes.",
-                },
+                "evaluation": build_not_applicable_evaluation(
+                    "Consulta fuera del dominio soportado por los agentes."
+                ),
             }
 
             if langfuse_client is not None:
@@ -290,20 +284,19 @@ def run_pipeline(question: str, session_id: str = "default_session"):
                     metadata={"destination": destination, "out_of_scope": True}
                 )
                 langfuse_client.score_current_trace(
-                    name="score_general",
+                    name="evaluation_applicable",
                     value=0,
-                    data_type="NUMERIC",
-                    comment="Consulta clasificada como fuera de alcance.",
+                    data_type="BOOLEAN",
+                    comment="Las consultas fuera de alcance no generan respuesta RAG.",
                     metadata={"destination": destination},
                 )
-                for metric_name in ("relevancia", "completitud", "fidelidad"):
-                    langfuse_client.score_current_trace(
-                        name=metric_name,
-                        value=0,
-                        data_type="NUMERIC",
-                        comment="Consulta clasificada como fuera de alcance.",
-                        metadata={"destination": destination},
-                    )
+                langfuse_client.score_current_trace(
+                    name="out_of_scope_handled",
+                    value=1,
+                    data_type="BOOLEAN",
+                    comment="Consulta rechazada correctamente por el router.",
+                    metadata={"destination": destination},
+                )
                 langfuse_client.update_current_span(output=result)
                 langfuse_client.flush()
 

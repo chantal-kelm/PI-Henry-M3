@@ -153,6 +153,11 @@ La prueba live utiliza las consultas de `test_queries.json`, requiere
 `status`, `meets_threshold`, precisión, cobertura y detalle por consulta. El
 comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
 puede utilizarse como gate de CI.
+La prueba live utiliza las consultas de `test_queries.json`, requiere
+`OPENAI_API_KEY` y exige una precisión mínima del 90%. El resumen incluye
+`status`, `meets_threshold`, precisión, cobertura y detalle por consulta. El
+comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
+puede utilizarse como gate de CI.
 
 ![alt text](image-12.png)
 
@@ -207,7 +212,8 @@ Mientras la consola muestra una salida limpia y rápida para el usuario, cada co
   "destination": "hr",
   "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones...",
   "evaluation": {
-    "score_general": 8,
+    "status": "evaluated",
+    "score_general": 8.33,
     "dimensiones": {
       "relevancia": 9,
       "completitud": 7,
@@ -222,17 +228,19 @@ Mientras la consola muestra una salida limpia y rápida para el usuario, cada co
 
 ## 📊 Observabilidad y Evaluación con Langfuse
 
-El sistema integra **Langfuse** para el monitoreo continuo, trazabilidad de llamadas a los agentes y evaluación automatizada de la calidad de las respuestas (RAG Triad).
+El sistema integra **Langfuse** para el monitoreo continuo, trazabilidad de llamadas a los agentes y evaluación multidimensional de la calidad de las respuestas.
 
 ### 🔍 Agente Evaluador (`src/evaluator.py`)
-Cada respuesta generada por los agentes especializados es auditada automáticamente por un modelo de lenguaje evaluador (`gpt-4o-mini`) que calcula puntajes en una escala de 1 a 10 en tres dimensiones clave:
+Cada respuesta generada por los agentes especializados es auditada automáticamente por un modelo de lenguaje evaluador (`gpt-4o-mini`). La salida se valida mediante un schema Pydantic estricto que solo acepta enteros de 1 a 10 en tres dimensiones:
 
 * **Relevancia (`relevance`)**: Evalúa si la respuesta aborda directamente la pregunta del usuario.
 * **Completitud (`completeness`)**: Mide si la respuesta brinda toda la información necesaria de forma exhaustiva.
 * **Fidelidad (`accuracy`)**: Verifica que la respuesta se mantenga fiel al contexto de las políticas de la empresa sin alucinar datos.
-* **Calidad General (`score_general`)**: Ponderación global del desempeño del agente en la consulta.
+* **Calidad General (`score_general`)**: promedio aritmético calculado en Python a partir de las tres dimensiones validadas.
 
-Los resultados se registran en Langfuse utilizando la **Score API** sobre la traza principal `multi_agent_pipeline`, creando scores numéricos para `score_general`, `relevancia`, `completitud` y `fidelidad`, además de un score de texto con la justificación del evaluador.
+Una evaluación correcta retorna `status: evaluated`. Si el modelo evaluador, el parser o el proveedor fallan, retorna `status: evaluation_error` y scores nulos en vez de inventar una calificación neutral. Las consultas `out_of_scope` usan `status: not_applicable`, ya que no generan una respuesta RAG.
+
+Los resultados válidos se registran en Langfuse utilizando la **Score API** sobre la traza principal `multi_agent_pipeline`, creando scores numéricos para `score_general`, `relevancia`, `completitud` y `fidelidad`, además de un score de texto con la justificación. Los errores técnicos se registran por separado mediante `evaluation_succeeded` y `evaluation_error`.
 
 ![Evaluación y Trazabilidad en Langfuse](image-8.png)
 

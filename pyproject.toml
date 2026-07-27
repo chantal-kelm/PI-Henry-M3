@@ -17,4 +17,5 @@ dependencies = [
     "jupyter==1.0.0",
     "ipykernel==6.29.5",
     "langchain-community==0.3.0",
+    "pydantic==2.13.4",
 ]
