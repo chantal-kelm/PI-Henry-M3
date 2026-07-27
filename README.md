@@ -255,39 +255,6 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
   agrega una entrada a `results_log.json`. Es un registro de demostración, no
   una base de auditoría transaccional.
 
-## ⚠️ Limitaciones conocidas
-
-* El sistema soporta únicamente HR, Tech y Finance. Consultas legales u otros
-  dominios se clasifican como `out_of_scope`.
-* Cada dominio contiene actualmente un único documento sintético. Esto alcanza
-  el mínimo de chunks, pero no representa el volumen ni la diversidad de una
-  base corporativa real.
-* El cargador admite `.txt`, `.md` y `.csv`. Los archivos PDF todavía no están
-  soportados.
-* La caché de agentes vive únicamente en memoria. Al reiniciar el proceso se
-  reconstruyen los índices; tampoco existe invalidación automática si los
-  documentos cambian mientras el proceso está activo. En ese caso debe
-  reiniciarse el servicio o invalidarse explícitamente la caché del agente.
-* El retrieval usa similitud vectorial con `k=2`, sin umbral, reranking,
-  búsqueda híbrida ni citas en la respuesta.
-* El evaluator juzga la respuesta contra el contexto recuperado. No puede
-  detectar por sí solo que el retriever omitió un fragmento relevante presente
-  en el corpus completo.
-* El score se registra y se devuelve, pero actualmente no bloquea ni deriva una
-  respuesta de baja calidad.
-* Tanto el router como el evaluator dependen de OpenAI. La prueba live consume
-  API y sus resultados pueden variar aunque `temperature=0`.
-* Langfuse es opcional. Sin credenciales, o si falla la inicialización del
-  callback, no se exportan todos los detalles internos de LangChain.
-* `results_log.json` guarda texto sin redacción de PII, locking, rotación ni
-  protección para escrituras concurrentes. No debe usarse con datos sensibles
-  reales en su forma actual.
-* Las dependencias directas están fijadas, pero no existe un lockfile para las
-  dependencias transitivas.
-* Las entradas ya presentes en `results_log.json` son ejecuciones históricas y
-  pueden usar el contrato anterior del evaluator, sin el campo `status`.
-* `main.py` es un placeholder heredado; no es el entrypoint del sistema.
-
 ## ✅ Cobertura de Entregables
 
 * **Main notebook / múltiples archivos:** Implementación modular en `src/multi_agent_system.py`, `src/agents/orchestrator.py`, `src/agents/hr_agent.py`, `src/agents/tech_agent.py`, `src/agents/finance_agent.py` y `src/evaluator.py`.
