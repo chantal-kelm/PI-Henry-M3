@@ -233,8 +233,9 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 
 * **RAG especializado por dominio:** Cada agente carga su colección, aplica
   `RecursiveCharacterTextSplitter`, genera embeddings con
-  `OpenAIEmbeddings` e indexa en `InMemoryVectorStore`. El índice se construye
-  al crear el agente seleccionado.
+  `OpenAIEmbeddings` e indexa en `InMemoryVectorStore`. La construcción es lazy:
+  el primer acceso a un dominio crea su agente y los accesos posteriores
+  reutilizan la misma cadena, retriever e índice durante la vida del proceso.
 
 * **Chunking explícito y verificable:** Se usan `chunk_size=200` y
   `chunk_overlap=40`. Esta configuración permite superar el mínimo solicitado,
@@ -262,8 +263,10 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
   base corporativa real.
 * El cargador admite `.txt`, `.md` y `.csv`. Los archivos PDF todavía no están
   soportados.
-* `InMemoryVectorStore` se reconstruye para el dominio seleccionado en cada
-  ejecución. No existe persistencia ni caché de embeddings.
+* La caché de agentes vive únicamente en memoria. Al reiniciar el proceso se
+  reconstruyen los índices; tampoco existe invalidación automática si los
+  documentos cambian mientras el proceso está activo. En ese caso debe
+  reiniciarse el servicio o invalidarse explícitamente la caché del agente.
 * El retrieval usa similitud vectorial con `k=2`, sin umbral, reranking,
   búsqueda híbrida ni citas en la respuesta.
 * El evaluator juzga la respuesta contra el contexto recuperado. No puede
@@ -310,6 +313,7 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 │   ├── langfuse_utils.py       # Configuración de trazas y callbacks
 │   └── multi_agent_system.py   # Orquestador principal, Router y CLI
 ├── tests/                      # Tests deterministas sin servicios externos
+│   ├── test_agent_caching.py
 │   ├── test_evaluator.py
 │   └── test_routing_validation.py
 ├── .env.example

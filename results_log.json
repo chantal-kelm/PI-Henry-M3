@@ -344,5 +344,21 @@
       },
       "justificacion": "La respuesta aborda directamente la pregunta sobre la fecha límite para rendir gastos de viáticos, proporcionando información completa y precisa que coincide con el contexto recuperado. Además, menciona la política de reembolso y la necesidad de preaprobación, lo que añade valor a la respuesta."
     }
+  },
+  {
+    "timestamp": "2026-07-27T14:52:10.312792",
+    "question": "funciona la vpn en suiza?",
+    "destination": "tech",
+    "response": "Sí, la VPN corporativa debería funcionar en Suiza, siempre y cuando tengas acceso a internet y sigas los procedimientos establecidos por tu empresa para conectarte a la Red Privada Virtual.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre el funcionamiento de la VPN en Suiza, confirmando que debería funcionar si se cumplen las condiciones necesarias. Además, se alinea con el contexto que establece la obligatoriedad del uso de la VPN para la conexión remota."
+    }
   }
 ]

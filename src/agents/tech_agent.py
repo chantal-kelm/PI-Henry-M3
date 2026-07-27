@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -7,13 +9,15 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.agents.document_loader import load_domain_documents
 
 
+@lru_cache(maxsize=1)
 def get_tech_chain():
     """
     Carga la base de conocimiento de Soporte Técnico (IT), aplica fragmentación (chunking),
     genera los embeddings y retorna la cadena de respuesta junto con su retriever.
 
     El pipeline ejecuta el retriever una sola vez y entrega a la cadena un diccionario
-    con ``question`` y ``context``.
+    con ``question`` y ``context``. La cadena y el índice se reutilizan durante
+    toda la vida del proceso.
     """
     raw_docs = load_domain_documents("tech_docs")
 
