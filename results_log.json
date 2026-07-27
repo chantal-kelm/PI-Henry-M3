@@ -440,5 +440,21 @@
       },
       "justificacion": "La respuesta aborda directamente la pregunta sobre la duración de la licencia materna, proporcionando la información exacta de 90 días corridos de licencia remunerada para personas gestantes, que está respaldada por el contexto. Además, incluye información relevante sobre la acumulación con el período de vacaciones, aunque no se solicitó específicamente."
     }
+  },
+  {
+    "timestamp": "2026-07-27T16:24:49.011131",
+    "question": "¿Puedo presentar como gastos de viatico los gastos de Uber para ir a la oficina?",
+    "destination": "finance",
+    "response": "Según las políticas generales de rendición de gastos, el uso de taxis, remis corporativo y plataformas de transporte como Uber, Cabify o Didi se reembolsará únicamente para traslados vinculados de forma directa a actividades laborales específicas. Esto implica que los gastos de Uber para ir a la oficina no son considerados viáticos reembolsables, a menos que el traslado esté directamente relacionado con una actividad laboral autorizada.\n\nSi tiene más preguntas sobre su situación particular, le recomiendo que se comunique con el área de administración o finanzas para obtener una aclaración específica.",
+    "evaluation": {
+      "status": "evaluated",
+      "score_general": 10.0,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 10,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta aborda directamente la pregunta sobre la posibilidad de presentar gastos de Uber como viáticos, explicando que solo se reembolsan traslados vinculados a actividades laborales específicas. Además, incluye una recomendación para consultar con el área de administración o finanzas, lo que añade claridad y apoyo a la respuesta."
+    }
   }
 ]

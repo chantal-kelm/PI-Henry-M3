@@ -32,7 +32,7 @@
     "expected": "tech"
   },
   {
-    "question": "¿A qué mail puedo mandar una consulta sobre liquidación de haberes o finanzas?",
+    "question": "¿Puedo presentar como gastos de viatico los gastos de Uber para ir a la oficina?",
     "expected": "finance"
   },
   {
