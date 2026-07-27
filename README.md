@@ -1,79 +1,58 @@
 # 🤖 Proyecto Integrador 3: Sistema Multiagente RAG con Evaluación Automática
 
-Un sistema multiagente inteligente, modular y estructurado en scripts de Python diseñado para responder consultas corporativas especializadas de **Recursos Humanos (RH)**, **Finanzas (Finance)** y **Soporte Técnico (Tech)** mediante arquitectura RAG (*Retrieval-Augmented Generation*), monitoreo continuo con Langfuse y evaluación automática.
+Sistema modular para responder consultas corporativas de **Recursos Humanos
+(HR)**, **Finanzas (Finance)** y **Soporte Técnico (Tech)** mediante RAG
+(*Retrieval-Augmented Generation*), routing con LangChain, trazabilidad opcional
+con Langfuse y evaluación automática de las respuestas.
 
 
 ## 🏛️ Arquitectura del Sistema
 
-El flujo de procesamiento está diseñado bajo principios de modularidad, eficiencia en consumo de tokens y separación de responsabilidades:
+El flujo separa clasificación, recuperación, generación y evaluación:
 
 ```text
-                               ┌──────────────────────────┐
-                               │     Entrada Usuario      │
-                               └────────────┬─────────────┘
-                                            │
-                                            ▼
-                             ┌──────────────────────────────┐
-                             │ Router / Out-of-Scope Filter │
-                             └──────────────┬───────────────┘
-                                            │
-                  ┌─────────────────────────┼─────────────────────────┐
-                  │                         │                         │
-            (Coincide HR)            (Coincide Tech)          (Coincide Finance)
-                  │                         │                         │
-                  ▼                         ▼                         ▼
-         ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
-         │    HR Agent     │       │   Tech Agent    │       │  Finance Agent  │
-         │ (RAG: hr_docs)  │       │ (RAG: tech_docs)│       │ (finance_docs)  │
-         └────────┬────────┘       └────────┬────────┘       └────────┬────────┘
-                  │                         │                         │
-                  └─────────────────────────┼─────────────────────────┘
-                                            │
-                                            ▼
-                             ┌──────────────────────────────┐
-                             │      Respuesta del Agente    │
-                             └──────────────┬───────────────┘
-                                            │
-                                            ▼
-                             ┌──────────────────────────────┐
-                             │    Evaluador de Calidad      │
-                             │      (src/evaluator.py)      │
-                             └──────────────┬───────────────┘
-                                            │
-                  ┌─────────────────────────┴─────────────────────────┐
-                  │                                                   │
-                  ▼                                                   ▼
-   ┌──────────────────────────────┐                    ┌──────────────────────────────┐
-   │ Salida Consola / Usuario     │                    │  Langfuse / Logger Local     │
-   │ (Respuesta + Score)          │                    │     (results_log.json)       │
-   └──────────────────────────────┘                    └──────────────────────────────┘
+Usuario
+  │
+  ▼
+Router LLM
+  ├── HR ───────► Retriever HR ───────┐
+  ├── Tech ─────► Retriever Tech ─────┼──► Generación ─► Evaluador
+  ├── Finance ──► Retriever Finance ──┘
+  └── Out of scope ──────────────────────► Respuesta estática
+
+Resultado ─► CLI + results_log.json
+          └► Langfuse, si está configurado
 ```
+
+Para las consultas soportadas se realiza una única recuperación. Ese mismo
+contexto se utiliza para generar la respuesta y para evaluarla.
 
 ## 🚀 Requisitos Previos e Instalación
 
-## Requisitos de Entorno
+### Requisitos de entorno
 
 ```text
 Python: >= 3.11, < 3.13
 ```
 
-Instalación de Dependencias
-Podés instalar las dependencias fijadas en requirements.txt mediante pip o el gestor uv:
+Las dependencias directas están fijadas en `requirements.txt` y
+`pyproject.toml`. Podés instalarlas mediante pip o el gestor uv:
 
-## Con uv (Recomendado)
+### Con uv
 
-```text
+```bash
 uv pip install -r requirements.txt
 ```
 
-## Con pip tradicional
+### Con pip
 
-```text
+```bash
 pip install -r requirements.txt
 ```
 
-## Configuración de Variables de Entorno (API Keys)
-Crea un archivo .env en la raíz del proyecto basándote en .env.example:
+### Configuración de variables de entorno
+
+Creá un archivo `.env` en la raíz basándote en `.env.example`:
 
 ```text
 OPENAI_API_KEY=tu_openai_api_key
@@ -82,16 +61,20 @@ LANGFUSE_SECRET_KEY=tu_secret_key
 LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
-## 🖥️ Ejecución del Proyecto
-1. Interfaz Interactiva CLI (Terminal)
-Para iniciar el sistema multiagente de forma interactiva en la terminal:
+## 🖥️ Ejecución del proyecto
+
+Ejecutá los comandos desde la raíz del repositorio. El entrypoint soportado es
+el módulo `src.multi_agent_system`.
+
+### Interfaz interactiva
 
 ```text
 python -m src.multi_agent_system
 ```
 
-2. Importación como Módulo
-Al estar desarrollado como un paquete modular en la carpeta src/, también se puede importar la función principal run_pipeline desde cualquier otro script de Python:
+### Importación como módulo
+
+También se puede importar la función principal:
 
 ```text
 from src.multi_agent_system import run_pipeline
@@ -153,11 +136,6 @@ La prueba live utiliza las consultas de `test_queries.json`, requiere
 `status`, `meets_threshold`, precisión, cobertura y detalle por consulta. El
 comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
 puede utilizarse como gate de CI.
-La prueba live utiliza las consultas de `test_queries.json`, requiere
-`OPENAI_API_KEY` y exige una precisión mínima del 90%. El resumen incluye
-`status`, `meets_threshold`, precisión, cobertura y detalle por consulta. El
-comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
-puede utilizarse como gate de CI.
 
 ![alt text](image-12.png)
 
@@ -168,7 +146,8 @@ Para comprobar que cada colección documental supera el mínimo de 50 chunks exi
 python script_chunks.py
 ```
 
-Este script reutiliza la misma estrategia de fragmentación del sistema productivo y muestra por consola la cantidad de chunks generados para HR, Tech y Finance.
+Este script reutiliza los parámetros del pipeline y muestra por consola la
+cantidad de chunks: HR 57, Tech 53 y Finance 70 con los documentos actuales.
 
 ![alt text](image-6.png)
 
@@ -181,7 +160,7 @@ Este script reutiliza la misma estrategia de fragmentación del sistema producti
 | **Recursos Humanos** | *"¿Cuántos días de vacaciones tengo?"* | `HR` | Consulta RAG de políticas de RRHH e informa limitación de legajo en tiempo real. |
 | **Finanzas** | *"¿Cuál es la fecha límite para rendir los gastos de viáticos?"* | `FINANCE` | Consulta RAG sobre políticas de gastos y reembolsos corporativos. |
 | **Soporte Técnico** | *"No me funciona la VPN de la empresa"* | `TECH` | Consulta RAG de guías técnicas y soporte. |
-| **Out of Scope** | *"¿Cuál es la playa más linda?"* | `OUT_OF_SCOPE` | Filtrado instantáneo a costo $0$ de tokens con respuesta de ámbito estática. |
+| **Out of Scope** | *"¿Cuál es la playa más linda?"* | `OUT_OF_SCOPE` | El router consume una llamada LLM, pero se omiten retrieval, generación RAG y evaluación. |
 
 ---
 
@@ -203,14 +182,15 @@ Este script reutiliza la misma estrategia de fragmentación del sistema producti
 
 ### 📊 Registro de Auditoría Multidimensional (`results_log.json`)
 
-Mientras la consola muestra una salida limpia y rápida para el usuario, cada consulta guarda automáticamente una auditoría multidimensional completa en `results_log.json`:
+Cada ejecución del pipeline guarda pregunta, destino, respuesta y estado de
+evaluación en `results_log.json`:
 
 ```json
 {
   "timestamp": "2026-07-19T22:07:30.615035",
   "question": "cuantos dias de vacaciones tengo?",
   "destination": "hr",
-  "response": "Según la política general de Recursos Humanos, todos los empleados tienen derecho a 15 días de vacaciones...",
+  "response": "Los días dependen de la antigüedad: 14, 21, 28 o 35 días corridos según el tramo aplicable.",
   "evaluation": {
     "status": "evaluated",
     "score_general": 8.33,
@@ -228,7 +208,8 @@ Mientras la consola muestra una salida limpia y rápida para el usuario, cada co
 
 ## 📊 Observabilidad y Evaluación con Langfuse
 
-El sistema integra **Langfuse** para el monitoreo continuo, trazabilidad de llamadas a los agentes y evaluación multidimensional de la calidad de las respuestas.
+Cuando las tres variables de Langfuse están configuradas, el sistema exporta
+trazas de las llamadas a los agentes y los resultados de la evaluación.
 
 ### 🔍 Agente Evaluador (`src/evaluator.py`)
 Cada respuesta generada por los agentes especializados es auditada automáticamente por un modelo de lenguaje evaluador (`gpt-4o-mini`). La salida se valida mediante un schema Pydantic estricto que solo acepta enteros de 1 a 10 en tres dimensiones:
@@ -246,23 +227,68 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 
 ## ⚙️ Notas de Configuración y Decisiones Técnicas
 
-* **Routing con LangChain:** El orquestador usa `ChatPromptTemplate` + `ChatOpenAI` + `StrOutputParser` para clasificar la intención y activar un enrutamiento condicional hacia el agente de dominio correspondiente.
+* **Routing con LangChain:** El orquestador usa `ChatPromptTemplate` +
+  `ChatOpenAI` + `StrOutputParser`. La selección posterior del agente se realiza
+  mediante control de flujo Python.
 
-* **RAG especializado por dominio:** Cada agente carga su colección documental, aplica `RecursiveCharacterTextSplitter`, genera embeddings con `OpenAIEmbeddings`, indexa en `InMemoryVectorStore` y responde únicamente con el contexto recuperado.
+* **RAG especializado por dominio:** Cada agente carga su colección, aplica
+  `RecursiveCharacterTextSplitter`, genera embeddings con
+  `OpenAIEmbeddings` e indexa en `InMemoryVectorStore`. El índice se construye
+  al crear el agente seleccionado.
 
-* **Chunking explícito y verificable:** La fragmentación documental usa `RecursiveCharacterTextSplitter` con `chunk_size=200` y `chunk_overlap=40`, buscando equilibrio entre granularidad de recuperación y preservación de contexto. El script `script_chunks.py` permite auditar rápidamente cuántos chunks genera cada dominio y demostrar que se supera el mínimo solicitado.
+* **Chunking explícito y verificable:** Se usan `chunk_size=200` y
+  `chunk_overlap=40`. Esta configuración permite superar el mínimo solicitado,
+  pero no constituye por sí sola una validación de calidad semántica.
 
-* **Trazabilidad completa con Langfuse:** El pipeline principal, el router, la recuperación de contexto, la generación de respuesta y el evaluador quedan instrumentados como observaciones independientes. Además, las invocaciones internas de LangChain se exportan mediante `LangchainCallbackHandler`, lo que permite depurar misclassifications, retrievals y respuestas finales dentro del mismo trace.
+* **Trazabilidad con Langfuse:** El pipeline, router, retrieval, generación y
+  evaluator están instrumentados como observaciones independientes. Las
+  invocaciones internas se exportan mediante `CallbackHandler` cuando Langfuse
+  está habilitado y el callback se inicializa correctamente.
 
-* **Evaluación automática con Score API:** El evaluador registra scores por dimensión directamente en Langfuse para habilitar análisis continuos de calidad, filtrado por trace y debugging posterior.
+* **Evaluación automática con Score API:** Solo las evaluaciones con
+  `status: evaluated` generan scores numéricos. Los fallos técnicos y casos no
+  aplicables se registran por separado.
 
-* **Persistencia local complementaria:** Todas las ejecuciones se guardan de forma acumulativa en `results_log.json` sin sobrescribir pruebas anteriores. Esto funciona como respaldo local incluso si Langfuse no está configurado en un entorno puntual.
+* **Persistencia local complementaria:** En ejecución secuencial, cada llamada
+  agrega una entrada a `results_log.json`. Es un registro de demostración, no
+  una base de auditoría transaccional.
+
+## ⚠️ Limitaciones conocidas
+
+* El sistema soporta únicamente HR, Tech y Finance. Consultas legales u otros
+  dominios se clasifican como `out_of_scope`.
+* Cada dominio contiene actualmente un único documento sintético. Esto alcanza
+  el mínimo de chunks, pero no representa el volumen ni la diversidad de una
+  base corporativa real.
+* El cargador admite `.txt`, `.md` y `.csv`. Los archivos PDF todavía no están
+  soportados.
+* `InMemoryVectorStore` se reconstruye para el dominio seleccionado en cada
+  ejecución. No existe persistencia ni caché de embeddings.
+* El retrieval usa similitud vectorial con `k=2`, sin umbral, reranking,
+  búsqueda híbrida ni citas en la respuesta.
+* El evaluator juzga la respuesta contra el contexto recuperado. No puede
+  detectar por sí solo que el retriever omitió un fragmento relevante presente
+  en el corpus completo.
+* El score se registra y se devuelve, pero actualmente no bloquea ni deriva una
+  respuesta de baja calidad.
+* Tanto el router como el evaluator dependen de OpenAI. La prueba live consume
+  API y sus resultados pueden variar aunque `temperature=0`.
+* Langfuse es opcional. Sin credenciales, o si falla la inicialización del
+  callback, no se exportan todos los detalles internos de LangChain.
+* `results_log.json` guarda texto sin redacción de PII, locking, rotación ni
+  protección para escrituras concurrentes. No debe usarse con datos sensibles
+  reales en su forma actual.
+* Las dependencias directas están fijadas, pero no existe un lockfile para las
+  dependencias transitivas.
+* Las entradas ya presentes en `results_log.json` son ejecuciones históricas y
+  pueden usar el contrato anterior del evaluator, sin el campo `status`.
+* `main.py` es un placeholder heredado; no es el entrypoint del sistema.
 
 ## ✅ Cobertura de Entregables
 
 * **Main notebook / múltiples archivos:** Implementación modular en `src/multi_agent_system.py`, `src/agents/orchestrator.py`, `src/agents/hr_agent.py`, `src/agents/tech_agent.py`, `src/agents/finance_agent.py` y `src/evaluator.py`.
-* **Colecciones de documentos:** `data/hr_docs/`, `data/tech_docs/` y `data/finance_docs/`, con más de 50 chunks por dominio usando la configuración actual de chunking.
-* **Test queries:** `test_queries.json` contiene 12 consultas, cubriendo `hr`, `tech`, `finance` y casos `out_of_scope`.
+* **Colecciones de documentos:** HR 57, Tech 53 y Finance 70 chunks con la configuración y corpus actuales.
+* **Test queries:** `test_queries.json` contiene 12 consultas y cubre `hr`, `tech`, `finance` y `out_of_scope`.
 * **README:** incluye descripción del proyecto, instalación, configuración, ejecución, pruebas, decisiones técnicas y limitaciones.
 
 ## 📁 Estructura del Proyecto
@@ -275,14 +301,23 @@ Los resultados válidos se registran en Langfuse utilizando la **Score API** sob
 │   └── tech_docs/
 ├── src/
 │   ├── agents/                 # Agentes especializados por módulo
+│   │   ├── document_loader.py  # Carga validada de las colecciones
 │   │   ├── finance_agent.py
 │   │   ├── hr_agent.py
 │   │   ├── orchestrator.py
 │   │   └── tech_agent.py
 │   ├── evaluator.py            # Auditor externo de calidad
+│   ├── langfuse_utils.py       # Configuración de trazas y callbacks
 │   └── multi_agent_system.py   # Orquestador principal, Router y CLI
+├── tests/                      # Tests deterministas sin servicios externos
+│   ├── test_evaluator.py
+│   └── test_routing_validation.py
 ├── .env.example
+├── main.py                     # Placeholder heredado; no es el entrypoint
+├── script_chunks.py            # Conteo verificable por dominio
+├── test_queries.json           # Dataset de aceptación del router
 ├── pyproject.toml              # Especificación del proyecto y versión de Python
-├── requirements.txt            # Dependencias fijadas para reproducibilidad
-├── results_log.json            # Historial acumulativo de ejecuciones
+├── requirements.txt            # Dependencias directas fijadas
+├── results_log.json            # Historial local de demostración
 └── README.md
+```
