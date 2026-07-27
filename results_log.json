@@ -268,5 +268,65 @@
       },
       "justificacion": "Consulta fuera del dominio soportado por los agentes."
     }
+  },
+  {
+    "timestamp": "2026-07-27T13:07:10.085642",
+    "question": "funciona la vpn en alemania?",
+    "destination": "tech",
+    "response": "Sí, la VPN funcionará en Alemania siempre y cuando ingreses la dirección del servidor oficial: `vpn.empresa.com` (o la URL correspondiente al centro de datos asignado). Recuerda que es obligatorio utilizar la VPN para acceder a código y plataformas de gestión desde cualquier ubicación fuera de la oficina corporativa.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 10,
+        "completitud": 8,
+        "fidelidad": 9
+      },
+      "justificacion": "La respuesta es relevante y aborda directamente la pregunta sobre el funcionamiento de la VPN en Alemania. Proporciona información adicional sobre la necesidad de usar la VPN para acceder a recursos corporativos, lo que añade valor. Sin embargo, podría incluir más detalles sobre posibles restricciones o consideraciones específicas en Alemania para ser completamente completa."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T13:07:54.923601",
+    "question": "tengo una duda sobre mi recibo de sueldo",
+    "destination": "hr",
+    "response": "Para poder ayudarte con tu duda sobre el recibo de sueldo, necesitaría más información específica sobre el tema que te preocupa. ¿Es sobre los aportes de ley, descuentos, o algún otro aspecto en particular?",
+    "evaluation": {
+      "score_general": 8,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 7,
+        "fidelidad": 8
+      },
+      "justificacion": "La respuesta es relevante al solicitar más información específica sobre el recibo de sueldo, lo que permite abordar la duda del usuario. Sin embargo, la completitud se ve afectada ya que no se proporciona información directa sobre los aspectos mencionados en el contexto. La fidelidad es alta, ya que se mantiene en línea con el tema del recibo de sueldo."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T13:08:59.147317",
+    "question": "los viaticos en uber los tengo cubiertos?",
+    "destination": "finance",
+    "response": "De acuerdo con las políticas generales de rendición de viáticos, se reembolsará el uso de plataformas de transporte como Uber únicamente para traslados que estén vinculados de forma directa a actividades laborales. Para poder acceder al reembolso, es necesario presentar el comprobante digital de la plataforma correspondiente.\n\nTe recomiendo que verifiques si tu traslado cumple con estas condiciones y, en caso de dudas sobre tu situación particular, contactes al área de administración o finanzas para obtener información específica sobre tu caso.",
+    "evaluation": {
+      "score_general": 9,
+      "dimensiones": {
+        "relevancia": 9,
+        "completitud": 8,
+        "fidelidad": 10
+      },
+      "justificacion": "La respuesta es relevante y aborda directamente la pregunta sobre los viáticos en Uber, explicando las condiciones para el reembolso. Es completa, aunque podría incluir más detalles sobre el proceso de reembolso. La fidelidad es alta, ya que se basa en políticas claras y proporciona información precisa."
+    }
+  },
+  {
+    "timestamp": "2026-07-27T13:09:13.967574",
+    "question": "cual es la playa mas soleada?",
+    "destination": "out_of_scope",
+    "response": "Lo siento, esa consulta está fuera del ámbito corporativo de Recursos Humanos, Finanzas o Soporte Técnico.",
+    "evaluation": {
+      "score_general": 0,
+      "dimensiones": {
+        "relevancia": 0,
+        "completitud": 0,
+        "fidelidad": 0
+      },
+      "justificacion": "Consulta fuera del dominio soportado por los agentes."
+    }
   }
 ]

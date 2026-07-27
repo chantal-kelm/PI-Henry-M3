@@ -132,13 +132,27 @@ print(resultado)
 
 ### Validación automática del routing
 
-Para validar rápidamente que el orquestador cubre las categorías esperadas y los casos borde definidos en `test_queries.json`, ejecutá:
+La validación está separada en dos niveles.
+
+Para ejecutar los tests deterministas del contrato del dataset y del cálculo de
+métricas, sin API keys ni llamadas externas:
+
+```text
+python -m unittest discover -s tests -v
+```
+![alt text](image-13.png)
+
+Para ejecutar la prueba de aceptación contra el router LLM real:
 
 ```text
 python -m src.multi_agent_system --run-tests
 ```
 
-Este comando corre la suite de consultas de prueba, compara la categoría esperada contra la predicción del router y devuelve un resumen con cobertura y precisión de routing.
+La prueba live utiliza las consultas de `test_queries.json`, requiere
+`OPENAI_API_KEY` y exige una precisión mínima del 90%. El resumen incluye
+`status`, `meets_threshold`, precisión, cobertura y detalle por consulta. El
+comando devuelve exit code `1` si el router no alcanza el umbral, por lo que
+puede utilizarse como gate de CI.
 
 ![alt text](image-12.png)
 

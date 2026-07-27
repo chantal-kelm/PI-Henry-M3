@@ -60,4 +60,4 @@ def load_domain_documents(
             f"La colección {collection_path} solo contiene documentos vacíos."
         )
 
-    return documents 
+    return documents

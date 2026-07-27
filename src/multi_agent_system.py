@@ -1,7 +1,9 @@
 import os
 import sys
 import json
+from collections.abc import Callable
 from datetime import datetime
+from pathlib import Path
 
 from dotenv import load_dotenv
 from langfuse import observe, propagate_attributes
@@ -18,6 +20,13 @@ from src.langfuse_utils import (
 )
 
 load_dotenv()
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_TEST_QUERIES_PATH = PROJECT_ROOT / "test_queries.json"
+SUPPORTED_DESTINATIONS = frozenset({"hr", "finance", "tech", "out_of_scope"})
+REQUIRED_TEST_DESTINATIONS = SUPPORTED_DESTINATIONS
+MIN_TEST_QUERIES = 10
+DEFAULT_MIN_ROUTING_ACCURACY = 90.0
 
 
 def save_to_log(data: dict, filepath: str = "results_log.json"):
@@ -72,7 +81,7 @@ def route_intent(question: str) -> str:
     )
 
     destination = ensure_string(raw_destination).strip().lower()
-    return destination if destination in ["hr", "finance", "tech"] else "out_of_scope"
+    return destination if destination in SUPPORTED_DESTINATIONS else "out_of_scope"
 
 
 @observe(name="retrieve_context", as_type="retriever")
@@ -114,20 +123,78 @@ def generate_domain_response(agent, agent_input: dict):
     return agent.invoke(agent_input)
 
 
-def load_test_queries(filepath: str = "test_queries.json") -> list[dict]:
-    """Carga el set de consultas de prueba definido para el proyecto."""
-    with open(filepath, "r", encoding="utf-8") as f:
-        return json.load(f)
+def validate_test_queries(queries: object) -> list[dict]:
+    """Valida el contrato mínimo del dataset de aceptación de routing."""
+    if not isinstance(queries, list):
+        raise ValueError("El dataset de routing debe ser una lista JSON.")
+
+    if len(queries) < MIN_TEST_QUERIES:
+        raise ValueError(
+            f"El dataset debe contener al menos {MIN_TEST_QUERIES} consultas."
+        )
+
+    validated_queries = []
+    seen_questions = set()
+
+    for index, item in enumerate(queries):
+        if not isinstance(item, dict):
+            raise ValueError(f"La consulta en posición {index} debe ser un objeto.")
+
+        question = item.get("question")
+        expected = item.get("expected")
+
+        if not isinstance(question, str) or not question.strip():
+            raise ValueError(
+                f"La consulta en posición {index} debe tener una pregunta no vacía."
+            )
+
+        if expected not in SUPPORTED_DESTINATIONS:
+            raise ValueError(
+                f"La consulta en posición {index} tiene una categoría inválida: "
+                f"{expected!r}."
+            )
+
+        normalized_question = question.strip()
+        if normalized_question in seen_questions:
+            raise ValueError(f"Pregunta duplicada en el dataset: {normalized_question}")
+
+        seen_questions.add(normalized_question)
+        validated_queries.append(
+            {"question": normalized_question, "expected": expected}
+        )
+
+    covered_labels = {item["expected"] for item in validated_queries}
+    missing_labels = REQUIRED_TEST_DESTINATIONS - covered_labels
+
+    if missing_labels:
+        missing = ", ".join(sorted(missing_labels))
+        raise ValueError(f"El dataset no cubre las categorías requeridas: {missing}.")
+
+    return validated_queries
 
 
-@observe(name="routing_test_suite", as_type="chain")
-def run_test_suite(filepath: str = "test_queries.json") -> dict:
-    """Ejecuta pruebas de routing y resume cobertura y precisión."""
-    queries = load_test_queries(filepath)
+def load_test_queries(
+    filepath: str | Path = DEFAULT_TEST_QUERIES_PATH,
+) -> list[dict]:
+    """Carga y valida el set de consultas de aceptación del proyecto."""
+    path = Path(filepath)
+    with path.open("r", encoding="utf-8") as file:
+        return validate_test_queries(json.load(file))
+
+
+def evaluate_routing_queries(
+    queries: list[dict],
+    predictor: Callable[[str], str],
+    min_accuracy_percent: float = DEFAULT_MIN_ROUTING_ACCURACY,
+) -> dict:
+    """Evalúa un predictor de routing con un criterio explícito de aprobación."""
+    if not 0 <= min_accuracy_percent <= 100:
+        raise ValueError("El umbral de precisión debe estar entre 0 y 100.")
+
     results = []
 
     for item in queries:
-        predicted = route_intent(item["question"])
+        predicted = predictor(item["question"])
         results.append(
             {
                 "question": item["question"],
@@ -141,8 +208,12 @@ def run_test_suite(filepath: str = "test_queries.json") -> dict:
     passed = sum(1 for item in results if item["match"])
     accuracy = round((passed / total) * 100, 2) if total else 0.0
     covered_labels = sorted({item["expected"] for item in results})
+    meets_threshold = accuracy >= min_accuracy_percent
 
     return {
+        "status": "passed" if meets_threshold else "failed",
+        "meets_threshold": meets_threshold,
+        "minimum_accuracy_percent": min_accuracy_percent,
         "total_queries": total,
         "passed": passed,
         "failed": total - passed,
@@ -150,6 +221,25 @@ def run_test_suite(filepath: str = "test_queries.json") -> dict:
         "covered_labels": covered_labels,
         "results": results,
     }
+
+
+def routing_test_exit_code(summary: dict) -> int:
+    """Retorna un código de proceso seguro según el criterio de aprobación."""
+    return 0 if summary.get("meets_threshold") is True else 1
+
+
+@observe(name="routing_test_suite", as_type="chain")
+def run_test_suite(
+    filepath: str | Path = DEFAULT_TEST_QUERIES_PATH,
+    min_accuracy_percent: float = DEFAULT_MIN_ROUTING_ACCURACY,
+) -> dict:
+    """Ejecuta la prueba de aceptación live del router."""
+    queries = load_test_queries(filepath)
+    return evaluate_routing_queries(
+        queries=queries,
+        predictor=route_intent,
+        min_accuracy_percent=min_accuracy_percent,
+    )
 
 
 @observe(name="multi_agent_pipeline", as_type="chain")
@@ -282,7 +372,7 @@ if __name__ == "__main__":
     if "--run-tests" in sys.argv:
         summary = run_test_suite()
         print(json.dumps(summary, ensure_ascii=False, indent=2))
-        raise SystemExit(0)
+        raise SystemExit(routing_test_exit_code(summary))
 
     print("\n🤖 SISTEMA MULTIAGENTE INTERACTIVO ACTIVO")
     print("Escribí tu pregunta y presioná Enter.")
